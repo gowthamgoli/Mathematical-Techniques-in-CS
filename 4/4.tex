@@ -1,0 +1,908 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{4}  %homework number
+\def\due{Friday, November 4}  %due date
+\def\course{CSCI-GA.1180-001 
+} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{mathtools,xparse}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ }
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Thenn}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\NewDocumentCommand{\normL}{ s O{} m }{%
+  \IfBooleanTF{#1}{\norm*{#3}}{\norm[#2]{#3}}_{L_2(\Omega)}%
+}
+
+\begin{document}
+
+\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+    %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{1}
+
+\begin{itemize}
+\item[(a)] 
+\ifnum\me<2
+\begin{solution}
+
+Let $x^*$ be the solution to the linear least squares problem of minimizing $\norm{b - Ax}_2$ then we know that, $b_R = Ax^*$ and $r_N = b_N$, $r_R = b_R - Ax^* = 0$
+\begin{align*}
+r &= r_R + r_N\\
+\implies 0 &= 0 + r_N\\
+\implies r_N &= 0\\
+\implies b_N &= 0
+\end{align*}
+$\therefore b$ can be expressed only in terms of the range space component of $A$ as the null space component of $A^T$ is 0 i.e. $b = b_R = Ax^*$
+\end{solution}
+\fi
+
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+
+Let $x^*$ be the solution to the linear least squares problem of minimizing $\norm{b - Ax}_2$ then we know that, $b_R = Ax^* \implies$  $r_R = b_R - Ax^* = 0$ and $r_N = b_N$.
+
+$\because x^* = 0 \implies b_R = Ax^* = 0$ i.e. $r_R = b_R = 0$ and $r_N = b_N$
+
+$\therefore b$ can be expressed only in terms of the null space component of $A^T$ as the range space component of $A$ is 0 i.e. $b = b_N$.
+
+\end{solution}
+
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+
+Let $x_1^*, x_2^*$ be the solutions to the linear least squares problems of minimizing $\norm{b_1 - Ax_1}_2$ and $\norm{b_2 - Ax_2}_2$ then we know that $b_{R_1} = Ax_1^*$ and $b_{R_2} = Ax_2^*$. But is given that $x_1^* = x_2^* \implies b_{R_1} = b_{R_2}$.
+
+Also it is given that $b_1 \neq b_2 \implies b_{R_1} + b_{N_1} \neq b_{R_2} + b_{N_2} \implies b_{N_1} \neq b_{N_2}$
+
+$\therefore$ $b_1, b_2$ have equal range space components and unequal null space components
+\end{solution}
+\fi
+\end{itemize}
+
+\newproblem{2}
+
+\begin{itemize}
+ \item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+H(v) &= I - \frac{2vv^T}{\norm{v}_2^2}\\
+\implies H^T(v) &= I - \frac{2(vv^T)^T}{\norm{v}_2^2} = I - \frac{2vv^T}{\norm{v}_2^2} = H(v) \tag{1}\\
+\implies H^T(v)H(v) &= (I - \frac{2vv^T}{\norm{v}_2^2})(I - \frac{2vv^T}{\norm{v}_2^2})\\
+&= I - \frac{4vv^T}{\norm{v}_2^2} + \frac{4v(v^Tv)v^T}{\norm{v}_2^4}\\
+&= I - \frac{4vv^T}{\norm{v}_2^2} + \frac{4vv^T}{\norm{v}_2^2}\\
+&= I \tag{2}
+\end{align*}
+From (1) and (2), we can conclude that $H^T(v)H(v) = H(v)H^T(v) = I$ i.e., the associated Householder matrix is orthogonal
+\end{solution}
+\fi
+
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+
+\begin{align*}
+H(\alpha v) &= I - \frac{2 \alpha v (\alpha v)^T}{\norm{\alpha v}_2^2}\\
+&= I - \frac{2 \alpha^2 v v^T}{\alpha^2 \norm{v}_2^2}\\
+&= I - \frac{2vv^T}{\norm{v}_2^2}\\
+&= H(v)
+\end{align*}
+\end{solution}
+
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+Given that
+\begin{align*}
+Ha &= b\\
+\implies H^THa &= H^Tb\\
+\implies a &= Hb \,\,\,\,\,\,\, \text{Using (1) and (2)} \tag{3}
+\end{align*}
+Now consider $\norm{a}_2^2 = a^Ta$
+\begin{align*}
+\norm{a}_2^2 = a^Ta &= (Hb)^T (Hb)\\
+&= b^T(H^TH)b\\
+&= b^T b \\
+&= \norm{b}_2^2
+\end{align*}
+$\therefore$ If  $Ha = b$ it inherently implies that $\norm{a}_2^2 = \norm{b}_2^2$. (This isn't any additional information)
+Now consider $Ha = b \implies (I-2uu^T)a = b \implies a - b = 2uu^Ta$
+
+From (3), $Hb = a \implies (I-2uu^T)b = a \implies a - b = -2uu^Tb$
+
+From the above two equations we get
+
+ $uu^T(a+b) = 0 \implies (u^T u) u^T(a+b) = u^T 0 \implies u^T(a+b) = 0 \implies (a+b)^Tu = 0$
+\end{solution}
+\fi
+
+\item[(d)] 
+ 
+\ifnum\me<2
+\begin{solution}
+Let $u = \begin{pmatrix}
+u_1\\u_2
+\end{pmatrix} \implies u_1^2+u_2^2=1$
+From part (c)
+\begin{align*}
+&(a+b)^T u = 0\\
+\implies &\begin{pmatrix}
+8 & -4
+\end{pmatrix}\begin{pmatrix}
+u_1\\u_2
+\end{pmatrix} = 0\\
+\implies & u_2 = 2u_1\\
+\implies &5u_1^2 = 1\\
+\implies &u_1 = \pm 1/\sqrt{5}\\
+\implies &u_2 = \pm 2/\sqrt{5}\\
+\implies &u = \begin{pmatrix}
+1/\sqrt{5}\\
+2/\sqrt{5}
+\end{pmatrix}, \begin{pmatrix}
+-1/\sqrt{5}\\
+-2/\sqrt{5}
+\end{pmatrix}
+\end{align*}
+\end{solution}
+\fi
+
+\item[(e)] 
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+a = [9/2;-1];
+b = [7/2;-3];
+u1 = [1/sqrt(5); 2/sqrt(5)];
+u2 = [-1/sqrt(5); -2/sqrt(5)];
+H1 = [1 0; 0 1] - 2*(u1*u1');
+H2 = [1 0; 0 1] - 2*(u2*u2');
+H1a = H1*a
+H2a = H2*a
+\end{lstlisting}
+\begin{align*}
+Ha = \begin{pmatrix}
+3.5\\-3
+\end{pmatrix} = b
+\end{align*}
+\end{solution}
+\fi
+
+\end{itemize}
+
+
+\newproblem{3}
+
+\begin{itemize}
+\item[(1)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+Any $m$-vector $b$ can be expressed as a linear combinations of the columns of $U$.
+
+Let $b = u_1\lambda_1 + \dots + u_m\lambda_m$ i.e. $b = U \lambda$, where $\lambda = \begin{pmatrix}
+\lambda_1\\
+\vdots\\
+\lambda_m
+\end{pmatrix}$
+\begin{align*}
+x &= A^{\dagger}b\\
+&= VS^{\dagger}U^TU\lambda\\
+&= VS^{\dagger}\lambda \text{    as } U^TU = I\\
+&= V \begin{pmatrix}
+S_n^{-1} & 0\\
+\end{pmatrix} \lambda\\
+&= V \begin{pmatrix}
+1/\sigma_1 & 0 & \dots & 0 & 0 & \dots & 0\\
+0 & 1/\sigma_2 & \dots & 0 & 0 & \dots & 0\\
+  & & \ddots & & 0 & \dots & 0\\
+0 & 0 & \dots & 1/\sigma_n & 0 & \dots & 0
+\end{pmatrix}\begin{pmatrix}
+\lambda_1\\
+\vdots\\
+\lambda_m
+\end{pmatrix}\\
+&= V\begin{pmatrix}
+\lambda_1/\sigma_1\\
+\lambda_2/\sigma_2\\
+\vdots\\
+\lambda_n/\sigma_n
+\end{pmatrix}\\
+\implies x &= v_1\lambda_1/\sigma_1 + v_2\lambda_2/\sigma_2 + \dots + v_n\lambda_n/\sigma_n
+\end{align*}
+\end{solution}
+\fi
+
+\item[(2)] 
+
+\begin{itemize}
+
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+
+\begin{lstlisting}[frame=single]
+format long e;
+A = [1 1; 1 1+10^-6; 1 1+10^-6];
+b1 = [1;2.22474;-0.22474];
+b2 = [-2;1;1];
+
+[U,S,V] = svd(A)
+alpha = U\b1
+beta = U\b2
+
+b1_verify = U(:,1)*alpha(1,1) + U(:,2)*alpha(2,1) + U(:,3)*alpha(3,1)
+b2_verify = U(:,1)*beta(1,1) + U(:,2)*beta(2,1) + U(:,3)*beta(3,1)
+\end{lstlisting}
+Let $U\alpha = b_1$ and $U\beta = b_2$. Therefore, we have
+\begin{align*}
+b_1 &= u_1\alpha_1 + u_2\alpha_2 + u_3\alpha_3\\
+b_2 &= u_1\beta_1 + u_2\beta_2 + u_3\beta_3\\
+\text{where } \alpha &= \begin{pmatrix}
+-1.732050807568829e+00\\
+4.082482900763943e-07\\
+-1.732043918380825e+00\\
+\end{pmatrix}\\
+\beta &= \begin{pmatrix}
+-5.773502695703939e-07\\
+-2.449489742783110e+00\\
+1.922962686383511e-16
+\end{pmatrix}
+\end{align*}
+\end{solution}
+\fi
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+Sinv = [1/S(1,1) 0 0;
+        0 1/S(2,2) 0];
+Apseud = V*Sinv*U'
+\end{lstlisting}
+From the above matlab code we get
+\begin{align*}
+A^{\dagger} = \begin{pmatrix}
+1.000001000052131e+06  &  -5.000000000260655e+05   & -5.000000000260654e+05\\
+-1.000000000052131e+06  &   5.000000000260654e+05  &   5.000000000260653e+05
+\end{pmatrix}
+\end{align*}
+\end{solution}
+\fi
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+x1 = Apseud*b1
+alphasigma = [alpha(1,1)/S(1,1) ; alpha(2,1)/S(2,2)];
+x1_verify = V*alphasigma
+norm_x1 = norm(x1)
+norm_b1 = norm(b1);
+ratio_x1_b1 = norm_x1/norm_b1;
+
+\end{lstlisting}
+From the above matlab code we get
+\begin{align*}
+x_1 &= \begin{pmatrix}
+1.000000000001855e+00\\
+-4.795693371184925e-12
+\end{pmatrix}\\
+||x_1|| &= 1.000000000001855e+00\\
+||x_1||/||b_1|| &= 4.082491023640258e-01\\
+x_1 &= v_1\alpha_1/\sigma_1 + v_2\alpha_2/\sigma_2\\
+\text{where } \alpha_1/\sigma_1 &= -7.071065454842872e-01, \alpha_2/\sigma_2 = 7.071070162546135e-01
+\end{align*}
+\end{solution}
+\fi
+
+\item[(d)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+x2 = Apseud*b2
+betasigma = [beta(1,1)/S(1,1) ; beta(2,1)/S(2,2)];
+x2_verify = V*betasigma
+norm_x2 = norm(x2)
+norm_b2 = norm(b2);
+ratio_x2_b2 = norm_x2/norm_b2;
+\end{lstlisting}
+From the above matlab code we get
+\begin{align*}
+x_2 &= \begin{pmatrix}
+-3.000002000156393e+06\\
+3.000000000156393e+06\\
+\end{pmatrix}\\
+||x_2|| &= 4.242642101554256e+06\\
+||x_2||/||b_2|| &= 1.732051385009536e+06\\
+x_2 &= v_1\beta_1/\sigma_1 + v_2\beta_2/\sigma_2\\
+\text{where } \beta_1/\sigma_1 &=     -2.357021819835502 e -07
+, \beta_2/\sigma_2 = -4.242642101554258e+06
+\end{align*}
+\end{solution}
+\fi
+
+\item[(e)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+norm_x1_x2 = norm(x1-x2);
+norm_b1_b2 = norm(b1-b2);
+ratio = norm_x1_x2/norm_b1_b2
+\end{lstlisting}
+\begin{align*}
+\frac{\norm{x_1-x_2}}{\norm{b_1-b_2}} &= 1.224746701675926e+06
+\end{align*}
+So we can conclude that though they are very near by problems $\because \norm{b_1} - \norm{b_2} =  4.87 \times 10^{-6}$, the solutions to these problems i.e., $x_1$ and $x_2$ need not be close to each other  
+
+\end{solution}
+\fi
+
+\end{itemize}
+\end{itemize}
+
+
+\newproblem{4}
+
+\begin{itemize}
+
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+
+Given that $Z = \begin{pmatrix}
+-B^{-1}S\\
+I_{n-m}
+\end{pmatrix}$. From this we can conclude that there are $n-m$ columns of $Z$ and for the matrix product $AZ$ to be feasible, $Z$ must have $n$ rows. Therefore, the dimension of $Z$ is $n \times n-m \implies -B^{-1}S$ is of the form $m \times n-m \implies B^{-1}$ is of the form $m \times m \implies B$ is of the form $m \times m$  and $S$ is of the form $m \times n-m$. 
+\begin{align*}
+AZ &= \begin{pmatrix}
+B & S
+\end{pmatrix}\begin{pmatrix}
+-B^{-1}S\\
+I_{n-m}
+\end{pmatrix}\\
+&= \underbrace{\underbrace{B}_{m \times m} \cdot \underbrace{(-B^{-1}S)}_{m \times n-m}}_{m \times n-m} + \underbrace{\underbrace{S}_{m \times n-m} \cdot \underbrace{I_{n-m}}_{n-m \times n-m}}_{m \times n-m}\\
+&= \underbrace{\underbrace{-I}_{m \times m} \cdot \underbrace{S}_{m \times n-m}}_{m \times n-m} + \underbrace{\underbrace{S}_{m \times n-m} \cdot \underbrace{I_{n-m}}_{n-m \times n-m}}_{m \times n-m}\\
+&= \underbrace{-S + S}_{m \times n-m}\\
+&= 0
+\end{align*}
+Let $B^{-1}S = \begin{pmatrix}
+B^{-1}s_1 & B^{-1}s_2 & \dots & B^{-1}s_{n-m}
+\end{pmatrix} \implies $
+ $Z = \begin{pmatrix}
+-B^{-1}s_1& -B^{-1}s_2 & \dots & -B^{-1}s_{n-m}\\
+1 & 0 & \dots & 0\\
+0 & 1 & \dots & 0\\
+& & \ddots & &\\
+0 & 0 & \dots & 1
+\end{pmatrix}$
+
+The columns of $Z$ will be linearly independent if we can show that $Zy = 0$ only if $y=0$
+
+\begin{align*}
+&Zy  = 0\\
+\implies & \begin{pmatrix}
+-B^{-1}s_1& -B^{-1}s_2 & \dots & -B^{-1}s_{n-m}\\
+1 & 0 & \dots & 0\\
+0 & 1 & \dots & 0\\
+& & \ddots & &\\
+0 & 0 & \dots & 1
+\end{pmatrix} \begin{pmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_{n-m} 
+\end{pmatrix} = 0\\
+\implies &\begin{pmatrix}
+-y_1B^{-1}s_1 - y_2B^{-1}s_2 + \dots - y_{n-m}B^{-1}s_{n-m}\\
+y_1\\
+y_2\\
+\vdots\\
+y_{n-m}
+\end{pmatrix} = 0\\
+\implies &\begin{pmatrix}
+-B^{-1}Sy\\
+y
+\end{pmatrix} = 0\\
+\implies &y = 0
+\end{align*}
+$\therefore$ The columns of $Z$ are linearly independent
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+\begin{itemize}
+\item The dimension of $Z$ is $n \times n-m$ $\implies v$ must be a $ n-m$ vector$\implies $
+
+Let $v = \begin{pmatrix}
+v_1 \\ v_2 \\ \vdots \\ v_{n-m}
+\end{pmatrix}$ and $B^{-1}S = \begin{pmatrix}
+B^{-1}s_1 & \dots & B^{-1}s_{n-m}
+\end{pmatrix}$
+
+Now consider $B^{-1}s_j$, some $j^{th}$ column of the matrix $B^{-1}S$. Let $\lambda_j$ be a $m$ vector such that $B\lambda_j = s_j \implies \lambda_j = B^{-1}s_j$. But we know the $LU$ factorization of $B$. Therefore we can solve the the triangular system of equations $LU\lambda_j = s_j$ to get $\lambda_j$ (so the explicit matrix $B^{-1}$ is not needed $\implies -B^{-1}S = \begin{pmatrix}
+-\lambda_1 & \dots & -\lambda_{n-m}
+\end{pmatrix}$
+\begin{align*}
+\implies Zv &= \begin{pmatrix}
+-\lambda_1 & \dots & -\lambda_{n-m}\\
+& I_{n-m} &
+\end{pmatrix}v\\
+&= \begin{pmatrix}
+-\lambda_1v_1 - \dots  - \lambda_{n-m}v_{n-m}\\
+I_{n-m}v
+\end{pmatrix}\\
+&= \begin{pmatrix}
+-\lambda_1v_1 - \dots  - \lambda_{n-m}v_{n-m}\\
+v
+\end{pmatrix}\\
+\end{align*}
+
+\item The dimension of $Z^T$ is $n-m \times n$ $\implies q$ must be a $n$ vector $\implies $
+
+Let $q = \begin{pmatrix}
+q_1 \\ q_2 \\ \vdots \\ q_{n}
+\end{pmatrix}$,  $q_{1,m} = \begin{pmatrix}
+q_1 \\ \vdots \\ q_{m}
+\end{pmatrix}$, $q_{m+1,n} = \begin{pmatrix}
+q_{m+1} \\ \vdots \\ q_{n}
+\end{pmatrix}$
+
+Similar to the above part, let $ -B^{-1}S = \begin{pmatrix}
+-\lambda_1 & \dots & -\lambda_{n-m}
+\end{pmatrix}$ where $\lambda_j$ is the solution the the triangular system of equations $LU\lambda_j = s_j$ 
+\begin{align*}
+\implies Z^Tq &= \begin{pmatrix}
+-B^{-1}S\\
+I_{n-m}
+\end{pmatrix}^Tq\\
+&= \begin{pmatrix}
+(\underbrace{-B^{-1}S)^T}_{n-m \times m} & \underbrace{I_{n-m}}_{n-m \times n-m}
+\end{pmatrix} \begin{pmatrix}
+q_1 \\  \vdots\\ q_m \\ q_{m+1} \\ \vdots \\ q_{n}
+\end{pmatrix}\\
+&= (-B^{-1}S)^T\begin{pmatrix}
+q_1 \\ \vdots\\ q_m
+\end{pmatrix} + I_{n-m}\begin{pmatrix}
+q_{m+1} \\ \vdots\\ q_n
+\end{pmatrix}\\
+&= \begin{pmatrix}
+-\lambda_1 & \dots & -\lambda_{n-m}
+\end{pmatrix}^T q_{1,m} +  q_{m+1,n}\\
+&= \begin{pmatrix}
+-\lambda_1^T \\ \vdots \\ -\lambda_{n-m}^T
+\end{pmatrix} q_{1,m} +  q_{m+1,n}\\
+&= \begin{pmatrix}
+-\lambda_1^Tq_{1,m} \\ \vdots \\ -\lambda_{n-m}^Tq_{1,m}
+\end{pmatrix}  +  q_{m+1,n}
+\end{align*}
+\end{itemize}
+\end{solution}
+
+
+\end{itemize}
+\newproblem{5}
+
+The given model doesn't fit the given description because as $c$ increases i.e., as the person is more blonder, $\exp(-c)$ decreases and thus $h$ decreases. Therefore for the model to fit the given description, the definition of $c$ must be modified so that $c $ ranges from 0 to 1 with smaller values meaning blonder hair i.e. $c = 0$ is the blondest person.
+\begin{equation*}
+h \approx x_1\sqrt{t-4} + x_2(\frac{100}{w})+x_3\exp(-c)
+\end{equation*}
+\begin{itemize}
+\item[(a)] 
+\ifnum\me<2
+\begin{solution}
+
+
+As shown in the notes, we can formulate this into a linear least squares problem of minimizing $||Ax-h||_2$ where the model error of the person $j$ is 
+\begin{equation*}
+r_j = h_j - (x_1\sqrt{t_j-4} + x_2(\frac{100}{w_j})+x_3\exp(-c_j))
+\end{equation*}
+Therefore this can be expressed in a linear algebraic form where the residual $r$ is \begin{equation*}
+r = \begin{pmatrix}
+r_1\\
+\vdots\\
+r_m
+\end{pmatrix} = h - Ax
+\end{equation*} where Row $j$ of $A$ is $\begin{pmatrix}
+\sqrt{t_j-4} & \frac{100}{w_j} & \exp(-c_j)
+\end{pmatrix}$, $h = \begin{pmatrix}
+h_1\\
+\vdots\\
+h_m
+\end{pmatrix}$
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+format short e
+A=[ sqrt(5.2-4) 100/240   exp(-0.13);
+    sqrt(6.0-4) 100/162.3 exp(-0.83);
+    sqrt(5.9-4) 100/130.8 exp(-1.0) ;
+    sqrt(5.6-4) 100/150.1 exp(-0.24);
+    sqrt(6.2-4) 100/95.9  exp(-0.31);
+    sqrt(5.7-4) 100/141.2 exp(-0.47) ]
+cond2A = cond(A)
+\end{lstlisting}
+\begin{align*}
+A&= \begin{pmatrix}
+	1.0954e+00 &  4.1667e-01 &  8.7810e-01\\
+   1.4142e+00  & 6.1614e-01 &  4.3605e-01\\
+   1.3784e+00  & 7.6453e-01 &  3.6788e-01\\
+   1.2649e+00  & 6.6622e-01 &  7.8663e-01\\
+   1.4832e+00  & 1.0428e+00 &  7.3345e-01\\
+   1.3038e+00  & 7.0822e-01 &  6.2500e-01
+    \end{pmatrix}\\
+cond(A) &=  1.4426e+01
+\end{align*}
+\end{solution}
+
+\item[(c)]
+\begin{itemize}
+\item[(i)]
+\ifnum\me<2
+\begin{solution}
+From part(a), we can see that $b = \begin{pmatrix}
+9\\8\\7\\10\\12\\9
+\end{pmatrix} \implies ||b||_2 = 2.2782e+01$
+\end{solution}
+
+\item[(ii)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+b = [9;8;7;10;12;9];
+norm_b = norm(b);
+
+[U,S,V] = svd(A);
+
+Sinv = [1/S(1,1) 0 0 0 0 0;
+        0 1/S(2,2) 0 0 0 0;
+        0 0 1/S(3,3) 0 0 0];
+    
+Apseud = V*Sinv*U';
+x = Apseud*b
+\end{lstlisting}
+\begin{equation*}
+x = \begin{pmatrix}
+8.8085e-01\\
+   5.1051e+00\\
+   6.9423e+00\\
+\end{pmatrix}
+\end{equation*}
+\end{solution}
+
+\item[(iii)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+Ax = A*x
+r = Ax-b
+norm_r = norm(r)
+norm_r_b = norm(r)/norm(b)
+\end{lstlisting}
+\begin{align*}
+Ax &= \begin{pmatrix}
+9.1880e+00\\
+   7.4184e+00\\
+   7.6711e+00\\
+   9.9763e+00\\
+   1.1722e+01\\
+   9.1030e+00
+\end{pmatrix}\\
+r &= \begin{pmatrix}
+1.8805e-01\\
+  -5.8163e-01\\
+   6.7109e-01\\
+  -2.3659e-02\\
+  -2.7831e-01\\
+   1.0296e-01
+\end{pmatrix}\\
+\norm{r}_2 &= 9.5532e-01\\
+\norm{b}_2 &  = 2.2782e+01\\
+\norm{r}_2/\norm{b}_2 &= 4.1934e-02
+\end{align*}
+\end{solution}
+
+\item[(iv)]
+\ifnum\me<2
+\begin{solution}
+Yes, the model is effective at predicting the happiness because $\norm{r}_2/\norm{b}_2$ is  and $\norm{r}_2$ is two orders less than the magnitude of $\norm{b}_2$
+\end{solution}
+
+\item[(v)]
+\ifnum\me<2
+\begin{solution}
+From (iii), the components of $Ax$ gives the predicted happiness for the given 6 people. We can see that the 5th person is predicted to be the happiest with a happiness of 11.722.
+
+This is expected because we can see that $t_5 = 6.2, w_5 = 95.9, c_5 = 0.31$ i.e., he is the tallest, the thinnest and the second most blondest person of all the 6 people. Therefore the model correctly predicts that he is the happiest person.
+\end{solution}
+
+\item[(vi)]
+\ifnum\me<2
+\begin{solution}
+From (iii), the components of $Ax$ gives the predicted happiness for the given 6 people. We can see that the 2nd person is predicted to be the least happiest with a happiness of 7.4184.
+
+%From $x$ we can see that $x_1 = 0.88085, x_2 = 5.1051 ,x_3 = 6.9423$. Notice %that $x_1$ is lesser by one order of magnitude compared to $x_2, x_3$. Therefore %$t$ has considerably less importance relative to $w,c$ when calculating happiness
+This is kind of expected behavior too because we can see that $t_2 = 6.0, w_2 = 162.3, c_2 = 0.83$ i.e., he is the second heaviest, second least blondest.% It %could've been possible that the third person could be the least happiest as $t_3 %= 5.9, w_3 = 130.8, c_3 = 1.0$ i.e., he is the least blondest person but he's also the second thinnest person and $t_2 \approx t_3$. %Therefore it just depends %if the decrease in blondness counteracts the effect of decrease in weight from %2nd person to 3rd person and we can see that it doesn't but however their %predicted happiness are approximately equal.
+
+%We could also see that person 1 could've been the least happiest as he is the heaviest %and tiniest of all but he happens to be the most blondest person too which nullifies %the effect to tallness and weight. 
+\end{solution}
+
+\item[(vii)]
+\ifnum\me<2
+\begin{solution}
+The components of $r$ gives the model error of each person. We can see that the minimum error occurs for person 4 with an absolute error of $0.023659$. This is because $t_4 = 5.6, w_4 = 150.1, c_4 = 0.24$ i.e, he has an average height, average weight, average blondness, so he roughly falls around the median of all the attributes combined for the 6 persons.
+\end{solution}
+
+\item[(viii)]
+\ifnum\me<2
+\begin{solution}
+The components of $r$ gives the model error of each person. We can see that the maximum error occurs for person 3 with an absolute error of $0.67109$. This could be because $t_3 = 5.9, w_3 = 130.8, c_3 = 1.0$ i.e, he has a good height, good weight but he's the least blonde person i.e., his attributes are scattered or non uniform.
+\end{solution}
+
+\end{itemize}
+\pagebreak
+\item[(d)]
+
+\begin{itemize}
+\item[(i)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+format short e;
+A= [sqrt(5.2-4) 100/240   exp(-0.13);
+    sqrt(6.0-4) 100/162.3 exp(-0.83);
+    sqrt(5.9-4) 100/130.8 exp(-1.0);
+    sqrt(5.6-4) 100/150.1 exp(-0.24);
+    sqrt(6.2-4) 100/95.9  exp(-0.31);
+    sqrt(5.7-4) 100/141.2 exp(-0.47)];
+b = [4.5;6.5;10;5.5;11;6];
+[U,S,V] = svd(A);
+Sinv = [1/S(1,1) 0 0 0 0 0;
+        0 1/S(2,2) 0 0 0 0;
+        0 0 1/S(3,3) 0 0 0];   
+Apseud = V*Sinv*U';
+x = Apseud*b
+Ax = A*x
+r = Ax-b
+norm_r = norm(r)
+norm_b = norm(b)
+norm_r_b = norm(r)/norm(b)
+\end{lstlisting}
+\begin{align*}
+b &= \begin{pmatrix}
+4.5\\6.5\\10\\5.5\\11\\6
+\end{pmatrix}\\
+x &= \begin{pmatrix}
+1.4064e+00\\
+1.0149e+01\\
+-2.7482e+00\\
+\end{pmatrix}\\
+r&= \begin{pmatrix}
+-1.1440e+00\\
+   5.4350e-01\\
+  -1.3137e+00\\
+   8.7831e-01\\
+  -3.4727e-01\\
+   1.3034e+00\\
+\end{pmatrix}\\
+\norm{r}_2 &= 2.4332e+00\\
+\norm{b}_2 &= 1.8702e+01
+\\
+\norm{r}_2/\norm{b}_2 &= 1.3011e-01
+\end{align*}
+\end{solution}
+\item[(ii)]
+\ifnum\me<2
+\begin{solution}
+Because $\norm{r}_2/\norm{b}_2$ is greater than that of part(c), the model is not as good as the model in part(c) but it still does an okay job at predicting happiness as $\norm{r}_2$ is an order of magnitude less than $\norm{b}_2 $ 
+\end{solution}
+
+\item[(iii)]
+\ifnum\me<2
+\begin{solution}
+If we compare $x$ to the optimal coefficients in part(c), $x_1$ has increased, $x_2$ has increased, $x_3$ has become negative
+\begin{itemize}
+\item $\delta x_1/x_1 = .59664$. Therefore the impact of tallness will be increased by 0.6 times
+\item $\delta x_2/x_2 = .9880$. Therefore the impact of weight will be increased by 0.98 times
+\item $\delta x_3/x_3 = -1.395$. Because $x_3$ is negative, people with blonde hair will be less happier
+\end{itemize}
+The predicted happiness are as follows
+\begin{equation*}
+Ax = \begin{pmatrix}
+3.3560e+00\\
+   7.0435e+00\\
+   8.6863e+00\\
+   6.3783e+00\\
+   1.0653e+01\\
+   7.3034e+00\\
+\end{pmatrix}
+\end{equation*}
+For example, if we consider person 1, $t_1 = 5.2, w_1 = 240,  c_1 = 0.13$. In part (c), since, he had the most blondest hair he wasn't the least happiest person although he has least height and highest weight. But now he's the least happiest because the effect of blonde hair on happiness has been reversed 
+\end{solution}
+
+\end{itemize}
+
+\end{itemize}
+\end{document}
+
+

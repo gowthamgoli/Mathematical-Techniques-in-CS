@@ -1,0 +1,584 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{5}  %homework number
+\def\due{Tuesday, November 29}  %due date
+\def\course{CSCI-GA.1180-001 
+} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{mathtools,xparse}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ }
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Thenn}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\NewDocumentCommand{\normL}{ s O{} m }{%
+  \IfBooleanTF{#1}{\norm*{#3}}{\norm[#2]{#3}}_{L_2(\Omega)}%
+}
+
+\begin{document}
+
+\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+    %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{1}
+
+\begin{itemize}
+\item[(1)]
+\ifnum\me<2
+\begin{solution}
+\begin{equation*}
+20 = 5 \times 4
+\end{equation*}
+This is possible under the circumstances that
+\begin{itemize}
+\item the order of paths matter
+\item Any of the 5 paths can be chosen on the trip from bottom to top.
+\item On the trip from top to bottom, we can't choose the same path as we chose on the trip to top, so we have only 4 choices.
+\item Therefore, the total number of choices = 5 $\times$ 4
+\end{itemize}
+Acceptable round trips are $\{(1,2),(1,3),(1,4),(1,5),(2,1),(2,3),(2,4),(2,5),(3,1),(3,2),(3,4),\\(3,5),(4,1),(4,2),(4,3),(4,5),(5,1),(5,2),(5,3),(5,4)\}$
+\end{solution}
+\fi
+
+\item[(2)]
+\ifnum\me<2
+\begin{solution}
+\begin{equation*}
+25 = 5 \times 5
+\end{equation*}
+This is possible under the circumstances that
+\begin{itemize}
+\item the order of paths matter
+\item Any of the 5 paths can be chosen on the trip from bottom to top.
+\item Any of the 5 paths can be chosen on the trip from top to bottom.
+\item Therefore, the total number of choices = 5 $\times$ 5
+\end{itemize}
+Acceptable round trips are $\{(1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(2,3),(2,4),(2,5),(3,1),\\(3,2),(3,3),(3,4),(3,5),(4,1),(4,2),(4,3),(4,4),(4,5),(5,1),(5,2),(5,3),(5,4),(5,5)\}$
+\end{solution}
+\fi
+
+\item[(3)]
+\ifnum\me<2
+\begin{solution}
+\begin{equation*}
+\binom 5 2 = 10
+\end{equation*}
+It is clear that, we are any 2 paths from the given 5 paths. Therefore, this is possible under the circumstances that
+\begin{itemize}
+\item the order of the paths don't matter.
+\item the path from bottom to top is different from the path from bottom to top i.e., there are no repetitions.
+\end{itemize}
+Acceptable round trips are $\{(1,2),(1,3),(1,4),(1,5),(2,3),(2,4),(2,5),(3,4),(3,5),(4,5)\}$
+\end{solution}
+\fi
+
+\item[(4)]
+\ifnum\me<2
+\begin{solution}
+\begin{equation*}
+\binom 6 2 = 15
+\end{equation*}
+This is in the form of $\binom {n+k-1} {k}$ where $n=5, k=2$. Therefore, this is possible under the circumstances that
+\begin{itemize}
+\item the order of the paths don't matter.
+\item the path from bottom to top and top to bottom could be equal i.e., repetitions are allowed
+\end{itemize}
+Acceptable round trips are $\{(1,2),(1,2),(1,3),(1,4),(1,5),(2,2),(2,3),(2,4),(2,5),(3,3),(3,4),\\(3,5),(4,4),(4,5),(5,5)\}$
+\end{solution}
+\fi
+\end{itemize}
+\newproblem{2}
+
+\begin{itemize}
+\item[(1)] 
+
+\ifnum\me<2
+\begin{solution}
+
+Let $b$, $g$ represent boy and girl, then we have 4 possibilities as follows: $\{(b,b),(b,g),(g,g),(g,b)\}$ where the first element in the tuple is the younger child and the second element in the older child. 
+
+Let $C$ be the event that the both children are girls. Therefore, we need to compute $P[C | A]$.
+\begin{equation*}
+P[C | A] = \frac{P[C \cap A]}{P[A]}
+\end{equation*}
+\begin{itemize}
+\item $P[A]$ = Probability the older child is a girl. In the above set we can see that $g$ occurs at the second position in the tuple twice $\implies P[A] = 2/4 = 1/2$
+\item $C \cap A$ = Both the children are girls and the older child is a girl. If $C$ happens then $A$ happens automatically $\implies C \cap A = C \therefore$ From the above set we can see that, $P[C] = 1/4$ 
+\end{itemize}
+\begin{equation*}
+P[C | A] = \frac{1/4}{1/2} = 1/2
+\end{equation*}
+\end{solution}
+\fi
+
+\item[(2)] 
+\ifnum\me<2
+\begin{solution}
+Let $C$ be the event that both the children are girls and $D$ be the event that atleast one of the children is a girl. Therefore, we need to compute $P[C|D]$.
+\begin{equation*}
+P[C | D] = \frac{P[C \cap D]}{P[D]}
+\end{equation*}
+\begin{itemize}
+\item $P[D]$ = Probability the atleast one of the children is a girl. In the above set we can see that $g$ belongs to a tuple 3 times. $\implies P[D] = 3/4$
+\item $C \cap D$ = Both the children are girls and atleast one of the children is a girl. If $C$ happens then $D$ happens automatically $\implies C \cap D = C \therefore$ From the above set we can see that, $P[C] = 1/4$ 
+\end{itemize}
+\begin{equation*}
+P[C | D] = \frac{1/4}{3/4} = 1/3
+\end{equation*}
+\end{solution}
+
+\fi
+\end{itemize}
+
+
+\newproblem{3}
+
+\begin{itemize}
+\item[(a)] 
+
+\ifnum\me<2
+\begin{solution}
+Using the formula in the lecture notes, we know that, the probability of $k$ successes in $n$ trials where the success probability is $p$, failure probability is $q = 1-p$ is
+\begin{equation*}
+\binom n k p^k q^{n-k}
+\end{equation*}
+In this case, we have $n = 11$ (total number of carrots), $k = 11$ (number of acceptable carrots), $q = 0.14$ (unacceptable carrot probability), $p = 1-0.14 = 0.86$. Let $A$ be the event that all the carrots in the sample will be sweet (or no carrot in the sample is sour), then
+\begin{align*}
+P[A] = \binom {11} {11} \times 0.86^{11} \times 0.14^{(11-11)} = 0.1903
+\end{align*}
+\end{solution}
+\fi
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+Let $B$ be the event that 1 or more carrots in the sample is sour, then $B = A^c$
+\begin{equation*}
+P[B] = P[A^c] = 1-P[A] = 1-0.1903 = 0.8097
+\end{equation*}
+\end{solution}
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+Let $C$ be the event that at most 1 carrot in the sample is sour $\implies$ 0 carrots in the sample is sour or exactly 1 carrot in the sample is sour. We know from part(a), $P[A] = $ the probability of 0 carrots in the sample is sour is 0.1905. Let $D$ be the event that  exactly 1 carrot in the sample is sour (or 10 carrots are sweet), then similar to part (a), we get
+\begin{align*}
+P[D] &= \binom {11} {1} \times 0.86^{10} \times 0.14^{(11-10)} = 0.3408\\
+\therefore P[C] &= P[A] + P[D] = 0.1905 + 0.3408 = 0.5313
+\end{align*}
+\end{solution}
+\fi
+
+\end{itemize}
+
+
+\newproblem{4}
+
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+format short e;
+p = 0.75;
+n = 12;
+z = zeros(1,n);
+x = zeros(1,n);
+for i=1:n
+    z(i) = rand
+    if (z(i) <= p)
+        x(i) = 1;
+    else
+        x(i) = 0;
+    end
+end
+\end{lstlisting}
+
+\begin{quote}
+\textbf{Trial 1:}
+
+\texttt{
+z =\\
+  Columns 1 through 8\\
+   1.1921e-01   9.3983e-01   6.4555e-01   4.7946e-01   6.3932e-01   5.4472e-01   6.4731e-01   5.4389e-01\\ 
+  Columns 9 through 12\\
+   7.2105e-01   5.2250e-01   9.9370e-01   2.1868e-01\\
+   x =\\
+     1     0     1     1     1     1     1     1     1     1     0     1 = 10 heads = 0.83 
+}
+
+\textbf{Trial 2:}
+
+\texttt{
+z =\\
+  Columns 1 through 7\\
+   1.0580e-01   1.0970e-01   6.3591e-02   4.0458e-01   4.4837e-01   3.6582e-01   7.6350e-01\\
+  Columns 8 through 12\\
+   6.2790e-01   7.7198e-01   9.3285e-01   9.7274e-01   1.9203e-01\\
+x =\\
+     1     1     1     1     1     1     0     1     0     0     0     1 = 8 heads = 0.66}
+\pagebreak
+
+\textbf{Trial 3:}
+
+\texttt{
+z =\\
+  Columns 1 through 7\\
+   7.0405e-01   4.4231e-01   1.9578e-02   3.3086e-01   4.2431e-01   2.7027e-01   1.9705e-01\\
+  Columns 8 through 12\\
+   8.2172e-01   4.2992e-01   8.8777e-01   3.9118e-01   7.6911e-01\\
+x =\\
+     1     1     1     1     1     1     1     0     1     0     1     0 = 9 heads = 0.75
+}
+
+\textbf{Trial 4:}
+
+\texttt{
+z =\\  Columns 1 through 7\\
+   4.7952e-01   8.0135e-01   2.2784e-01   4.9809e-01   9.0085e-01   5.7466e-01   8.4518e-01\\
+  Columns 8 through 12\\
+   7.3864e-01   5.8599e-01   2.4673e-01   6.6642e-01   8.3483e-02\\
+x =\\
+     1     0     1     1     0     1     0     1     1     1     1     1 = 9 heads = 0.75
+}
+
+\textbf{Trial 5:}
+
+\texttt{
+z =\\
+  Columns 1 through 7\\
+   6.2596e-01   6.6094e-01   7.2975e-01   8.9075e-01   9.8230e-01   7.6903e-01   5.8145e-01\\
+  Columns 8 through 12\\
+   9.2831e-01   5.8009e-01   1.6983e-02   1.2086e-01   8.6271e-01\\
+x =\\
+     1     1     1     0     0     0     1     0     1     1     1     0 = 7 heads = 0.58 
+}
+
+\textbf{Trial 6:}
+
+\texttt{
+z =\\
+  Columns 1 through 8\\
+   4.8430e-01   8.4486e-01   2.0941e-01   5.5229e-01   6.2988e-01   3.1991e-02   6.1471e-01   3.6241e-01\\
+  Columns 9 through 12\\
+   4.9533e-02   4.8957e-01   1.9251e-01   1.2308e-01\\
+x =\\
+     1     0     1     1     1     1     1     1     1     1     1     1 = 11 heads = 0.91
+}
+
+\textbf{Trial 7:}
+
+\texttt{
+z =\\ Columns 1 through 8\\
+   4.9036e-01   8.5300e-01   8.7393e-01   2.7029e-01   2.0846e-01   5.6498e-01   6.4031e-01   4.1703e-01\\
+  Columns 9 through 12\\
+   2.0598e-01   9.4793e-01   8.2071e-02   1.0571e-01\\
+x =\\
+     1     0     0     1     1     1     1     1     1     0     1     1 = 9 heads = 0.75
+}
+
+\textbf{Trial 8:}
+
+\texttt{
+z =\\
+  Columns 1 through 8\\
+   1.4204e-01   1.6646e-01   6.2096e-01   5.7371e-01   5.2078e-02   9.3120e-01   7.2866e-01   7.3784e-01\\
+  Columns 9 through 12\\
+   6.3405e-02   8.6044e-01   9.3441e-01   9.8440e-01\\
+x =\\
+     1     1     1     1     1     0     1     1     1     0     0     0
+ = 9 heads = 0.75
+}
+\end{quote}
+We can see that in trials 3,4,7,8 the ratio of success is exactly equal to 0.75 and in the rest of the trails, it is very close to 0.75
+\end{solution}
+\fi
+
+\newproblem{5}
+
+\begin{itemize}
+\item[(a)] 
+\ifnum\me<2
+\begin{solution}
+This is similar to linear least squares problem of minimizing $\norm{Ax-b}^2_2$ where the $m$ vector $e$ corresponds to $m \times n$ matrix $A$ and the scalar $\beta$ corresponds to  the $n$ vector $x$.  $ \therefore e^Te\beta = e^Tb \implies \beta = \frac{e^Tb}{e^Te}$. $e^Te = m, e^Tb = b_1+\dots+b_m \implies \beta = \frac{b_1+\dots+b_m}{m}$
+\end{solution}
+\fi
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution} The maximum absolute value of an element is the infinity norm of a vector. Therefore, we need to choose $\beta$ such that $|b_i - \beta|$ is overall minimized. Intuitively, this will happen when $\beta$ is mid-way between the maximum ($b_{max}$) and minimum ($b_{min}$) elements of $b$. This can be heuristically justified as follows
+\begin{itemize}
+\item If we choose $\beta$ closer to $b_{min}$ then $|b_i - \beta|$ will become too big  $\forall b_i$ that are closer to $b_{max}$.
+\item If we choose $\beta$ closer to $b_{max}$ then $|b_i - \beta|$ will become too big  $\forall b_i$ that are closer to $b_{min}$.
+\end{itemize}
+Hence $\beta$ must lie in the mid way between $b_{min}$ and $b_{max}$ i.e., $\beta = \frac{b_{min}+b_{max}}{2}$
+\end{solution}
+\fi
+
+%\item[(c)]
+%\ifnum\me<2
+%\begin{solution}
+%\end{solution}
+%\fi
+
+\item[(d)]
+Using the code below for each part in (i), (ii), (iii) we get, 
+\begin{lstlisting}[frame=single]
+b = %Insert value of b here for each part
+e = [1 1 1 1 1 1 1];
+beta_one_norm = median(b)
+beta_two_norm = sum(b)/7
+beta_inf_norm = (min(b) + max(b))/2
+
+r1 = b-beta_one_norm*e
+norm_r1 = norm(r1,1)
+
+r2 = b-beta_two_norm*e
+norm_r2 = norm(r2,2)
+
+rinf = b-beta_inf_norm*e
+norm_rinf = norm(rinf,inf)
+\end{lstlisting}
+\begin{itemize}
+\item[(i)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+\beta_1 &= \beta_2 = \beta_{\infty} = 0\\
+r_1 &= \begin{pmatrix}
+-150  &  25   &  0  & -70   & 70  & 150 &  -25
+\end{pmatrix}^T\\
+\norm{r_1}_1 &= 490\\
+r_2 &=  \begin{pmatrix} -150  &  25   &  0 &  -70   & 70  & 150  & -25 \end{pmatrix}^T\\
+\norm{r_2}_2 &= 236.7488\\
+r_{\infty} &= \begin{pmatrix}  -150  &   25   &   0  &  -70 &    70  &  150  &  -25 \end{pmatrix}^T\\
+\norm{r_{\infty}} &= 150
+\end{align*}
+$\beta_1 = 0 \implies$ The median of $b$ is 0. Therefore the minimum value of $b$ must be less than or equal to 0 and $\beta_{\infty} = 0 \implies$ that $b_{\max} = -b_{\min}$ and $\beta_2 = 0 \implies$ the sum of all elements of $b$ is $0$. This could be possible when the elements of $b$ are symmetric around 0.
+\end{solution}
+\fi
+
+\item[(ii)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+\beta_1 &= 1\\
+\beta_2 &= 150.5714\\
+\beta_{\infty} &= 250.5000\\
+r_1 &= \begin{pmatrix}
+0 &  499   &  0 &  249    & 0   &299 &    0
+\end{pmatrix}^T\\
+\norm{r_1} &= 1047\\
+r_2 &=  \begin{pmatrix} -149.5714 & 349.4286 & -149.5714  & 99.4286 & -149.5714 & 149.4286 & -149.5714 \end{pmatrix}^T\\
+\norm{r_2}_2 &= 493.7628\\
+r_{\infty} &= \begin{pmatrix}  -249.5000 & 249.5000 & -249.5000 &  -0.5000 & -249.5000 &49.5000 & -249.5000 \end{pmatrix}^T\\
+\norm{r_{\infty}} &= 249.5000
+\end{align*}
+$\beta_1 = 1 \implies$ The median of $b$ is 1. Therefore the minimum value of $b$ must be less than or equal to 1 and $\beta_{\infty} \approx 250 \implies$ the maximum value of $b$ must be greater than or equal to 499 and $\beta_2 \approx 150 \implies$ the sum of all elements of $b$ is $ 150 \times 7 = 750$ 
+\end{solution}
+\fi
+
+\item[(iii)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+\beta_1 &= 1\\
+\beta_2 &= 14285\\
+\beta_{\infty} &= 49995\\
+r_1 &= \begin{pmatrix}
+ 0     &     -3      &   -11       &    3   & 6     &     -6     &   99999
+\end{pmatrix}^T\\
+\norm{r_1} &= 100028\\
+r_2 &= \begin{pmatrix}   -14284   &   -14287      -14295   &   -14281  &14278   &   -14290      & 85715 \end{pmatrix}^T\\
+\norm{r_2}_2 &= 9.2583e+04\\
+r_{\infty} &= \begin{pmatrix}   -49994      & -49997    &   -50005   &    -49991 &  -49988      & -50000    &    59005 \end{pmatrix}^T\\
+\norm{r_{\infty}} &= 59005
+\end{align*}
+$\beta_1 = 1 \implies$ The median of $b$ is 1. Therefore the minimum value of $b$ must be less than or equal to 1 and $\beta_{\infty} = 49995 \implies$  $b_{max}$ must be large and $\beta_2 = 14285 \implies$ $b_{max}$ must have been contributed to the overall increase of the sum of the elements of $b$. 
+\end{solution}
+\fi
+\end{itemize}
+
+
+\item[(e)]
+\ifnum\me<2
+\begin{solution}
+From part (iii) in the above question, we can see that $\beta_2$ and $\beta_{\infty}$ will be affected the most due to outliers and $\beta_1$ has no significant affect because
+\begin{itemize}
+\item $\beta_1$ depends only on the median.
+\item $\beta_2$ depends on the average sum of the elements of $b$. So it can be significantly increased or decreased with large or small outliers.
+\item $\beta_{\infty}$ depends on the maximum and minimum elements of $b$.
+
+\end{itemize}
+\end{solution}
+\fi
+
+\end{itemize}
+\end{document}
+
+

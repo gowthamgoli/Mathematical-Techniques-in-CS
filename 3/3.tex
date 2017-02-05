@@ -1,0 +1,778 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{3}  %homework number
+\def\due{Wednesday, October 21}  %due date
+\def\course{CSCI-GA.1180-001 
+} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{mathtools}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ }
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Thenn}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\begin{document}
+
+\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+    %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{1}
+
+\begin{itemize}
+ \item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+||A||_1 &= \max\limits_{1 \leq j \leq n} \sum\limits_{i=1}^{n} |a_{ij}| \implies \text{   (maximum of the absolute column sums)}\\
+&= \max \{|1|+|1|, |-2|+|-1|\}\\
+&= 3\\
+||A||_\infty &=  \max\limits_{1 \leq i \leq n} \sum\limits_{j=1}^{n} |a_{ij}|\implies \text{   (maximum of the absolute row sums)}\\
+&= \max \{|1|+|-2|, |1|+|-1|\}\\
+&= 3
+\end{align*}
+\end{solution}
+\fi
+
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+
+Let $u = \begin{pmatrix}
+u_1\\
+u_2
+\end{pmatrix}, ||v||_1 = 1 \implies |u_1| + |u_2| = 1$
+
+$Au = \begin{pmatrix}
+1 & -2\\
+1 & -1
+\end{pmatrix} \begin{pmatrix}
+u_1\\
+u_2
+\end{pmatrix} = \begin{pmatrix}
+u_1-2u_2\\
+u_1-u_2
+\end{pmatrix} , ||Au||_1 = ||A||_1 \implies |u_1-2u_2|+|u_1-u_2| = 3$
+\end{solution}
+Assume, $u_1 \geq 0$ and $u_2 < 0 \implies u_1 - 2u_2 >0$ and $u_1 - u_2 > 0$
+
+$\therefore u_1 - u_2 = 1$ and $(u_1-2u_2)+(u_1-u_2) = 3 \implies 2u_1-3u_2=3$. Solving these two equations we get $u_1 = 0, u_2 = -1 \implies$
+$ u = \begin{pmatrix}
+0\\
+-1
+\end{pmatrix}$
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+Let $v = \begin{pmatrix}
+v_1\\
+v_2
+\end{pmatrix} , ||v||_\infty = 1 \implies \max \{|v_1|, |v_2|\} = 1$
+
+$Av = \begin{pmatrix}
+1 & -2\\
+1 & -1
+\end{pmatrix} \begin{pmatrix}
+v_1\\
+v_2
+\end{pmatrix} = \begin{pmatrix}
+v_1-2v_2\\
+v_1-v_2
+\end{pmatrix} , ||Av||_\infty = ||A||_\infty \implies \max \{|v_1-2v_2|, |v_1-v_2|\} = 3$
+
+$\max \{|v_1|, |v_2|\} = 1 \implies $ one of $v_1, v_2$ has to be either 1 or -1. Let $v_1 = 1$
+
+$ \therefore \max \{|1-2v_2|, |1-v_2|\} = 3$. We easily see that $v_2 = -1$ satisfies this equation
+
+$\therefore v = \begin{pmatrix}
+1\\
+-1
+\end{pmatrix} $
+\end{solution}
+\fi
+\end{itemize}
+
+\newproblem{2}
+
+\ifnum\me<2
+\begin{solution}
+
+Since $A$ is a non-singular matrix, $A^{-1}$ will exist
+\begin{align*}
+Ax &= b\\
+\implies x &= A^{-1}b\\
+\implies ||x|| &\leq ||A^{-1}||\,\,||b||\\
+\implies ||A^{-1}|| &\geq \frac{||x||}{||b||}\\
+\implies ||A^{-1}|| &\geq \frac{1}{10^{-6}}\\
+\implies ||A^{-1}|| &\geq 10^6
+\end{align*}
+$\therefore cond(A) = ||A|| \,\, ||A^{-1}|| \geq 10^6 \implies$
+$cond(A)$ is large therefore $A$ is ill-conditioned
+
+\end{solution}
+
+
+\newproblem{3}
+
+\begin{itemize}
+\item[(a)] 
+\ifnum\me<2
+\begin{solution}
+
+Using GEPP, $M_1 = \begin{pmatrix}
+1 & 0\\
+-m_{21} & 1
+\end{pmatrix} = \begin{pmatrix}
+1 & 0\\
+-a_{21}/a_{11} & 1
+\end{pmatrix} = \begin{pmatrix}
+1 & 0\\
+-0.8736 & 1
+\end{pmatrix}$
+
+\begin{align*}
+M_1Ax &= M_1b\\
+\implies \begin{pmatrix}
+1 & 0\\
+-0.8736 & 1
+\end{pmatrix} \begin{pmatrix}
+0.625 & 0.4376\\
+0.546 & 0.3823
+\end{pmatrix}\begin{pmatrix}
+x_1\\
+x_2
+\end{pmatrix} &= \begin{pmatrix}
+1 & 0\\
+-0.8736 & 1
+\end{pmatrix} \begin{pmatrix}
+1.0626\\
+0.9283
+\end{pmatrix}\\
+\implies \begin{pmatrix}
+0.625 & 0.4376\\
+0 & 0.00001264
+\end{pmatrix} \begin{pmatrix}
+x_1\\
+x_2
+\end{pmatrix} &=  \begin{pmatrix}
+1.0626\\
+0.00001264
+\end{pmatrix} \\
+\implies x_2 &= 1\\
+\implies 0.625x_1 + 0.4376 &= 1.0626\\
+\implies x_1 &= 1\\
+\therefore x = \begin{pmatrix}
+1 \\
+1
+\end{pmatrix}
+\end{align*}
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+format long e;
+A = [0.625 0.4376;
+     0.546 0.3823];
+b = [1.0626; 0.9283];
+x_star = [1;1];
+x_tilda = A\b
+\end{lstlisting}
+$\widetilde{x} = \begin{pmatrix}
+9.999999999975465e-01\\
+1.000000000003504e+00
+\end{pmatrix}$
+\begin{itemize}
+\item[i.]
+
+\begin{lstlisting}[frame=single]
+d = x_tilda - x_star
+norm_d = norm(d)
+\end{lstlisting}
+\begin{align*}
+d &= \begin{pmatrix}
+-2.453481862119133e-12\\
+3.504085910321919e-12
+\end{pmatrix}\\
+||d|| &= 4.277638520803758e-12
+\end{align*}
+Since $||d||$ is almost zero, it means that $\widetilde{x}$ and $x$ are almost equal
+\item[ii.]
+
+\begin{lstlisting}[frame=single]
+r_star = b - A*x_star
+norm_r_star = norm(r_star)
+\end{lstlisting}
+\begin{align*}
+r^* &= \begin{pmatrix}
+0\\
+0
+\end{pmatrix}\\
+||r^*|| &= 0
+\end{align*}
+Since $||r^*||$ is  zero, it means that $b$ and $Ax^*$ are exactly equal
+\item[iii.]
+
+\begin{lstlisting}[frame=single]
+r_tilda = b - A*x_tilda
+norm_r_tilda = norm(r_tilda)
+\end{lstlisting}
+\begin{align*}
+ \widetilde{r} &= \begin{pmatrix}
+0\\
+0
+\end{pmatrix}\\
+||\widetilde{r}|| &= 0
+\end{align*}
+Since $||\widetilde{r}||$ is  zero, it means that $b$ and $A\widetilde{x}$ are exactly equal. (Although they aren't exactly equal the difference is so low that matlab rounded it off to 0)
+\end{itemize}
+\end{solution}
+
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+x_hat = [-27.678;41.958];
+r_hat = b - A*x_hat;
+E = (1/((transpose(x_hat))*x_hat))*(r_hat*transpose(x_hat))
+b1 = (A+E)*x_hat
+\end{lstlisting}
+
+\begin{align*}
+E &= \begin{pmatrix}
+-5.797322035777278e-06   &  8.788353131625949e-06\\
+     6.069003037814685e-07 &   -9.200203391163686e-07
+\end{pmatrix}\\
+b1 &= \begin{pmatrix}
+1.062600000000000e+00\\
+     9.282999999999986e-01
+\end{pmatrix} \approx b
+\end{align*}
+\end{solution}
+
+
+\item[(d)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+norm_x_hat_x_star = norm(x_hat - x_star)
+norm_x_hat_x_tilda = norm(x_hat - x_tilda)
+\end{lstlisting}
+\begin{align*}
+||\hat{x}-x^*|| &= 4.999985447978824e+01\\
+||\hat{x}-\widetilde{x}|| &= 4.999985447978396e+01
+\end{align*}
+We can see that $||\hat{x}-\widetilde{x}|| \approx ||\hat{x}-x^*||$ and $||\hat{x}-\widetilde{x}|| < ||\hat{x}-x^*||$ this means that
+ $\hat{x}$ is more closer to $\widetilde{x}$ than $\hat{x}$ is closer to $x^*$. 
+\end{solution}
+
+
+\item[(e)]
+\ifnum\me<2
+\begin{solution}
+
+\begin{itemize}
+\item $\hat{r} = \begin{pmatrix}
+5.292000000030050e-04\\
+    -5.539999999670808e-05
+\end{pmatrix}$
+
+\item $E = \begin{pmatrix}
+-5.797322035777278e-06   &  8.788353131625949e-06\\
+6.069003037814685e-07 &   -9.200203391163686e-07
+\end{pmatrix}$
+
+\item $||E|| = 1.058578570328090e-05$
+\item $||A|| = 1.013108113647895e+00$
+\end{itemize}
+$||E|| << ||A||$. Therefore we can imply that $||E||$ is small
+\end{solution}
+
+
+\item[(f)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+x_bar = (A+E)\b
+\end{lstlisting}
+\begin{align*}
+\bar{x} = \begin{pmatrix}
+ -2.767800001642768e+01\\
+     4.195800002346206e+01
+\end{pmatrix}
+\end{align*}
+\end{solution}
+
+\item[(g)]
+\ifnum\me<2
+\begin{solution}
+\begin{lstlisting}[frame=single]
+norm_x_bar_x_hat = norm(x_bar - x_hat)
+\end{lstlisting}
+\begin{align*}
+||\bar{x}-\hat{x}|| = 2.864152054095992e-08
+\end{align*}
+Yes the norm is small i.e $\bar{x}$ is close to $\hat{x}$
+\end{solution}
+
+\item[(h)]
+\ifnum\me<2
+\begin{solution}
+
+Yes it can be said that $\hat{x}$ is close to the exact solution of a system that is close to the original system because $||\hat{x} - x^*|| = 4.999985447978824e+01 \approx ||\hat{x} - \widetilde{x}|| = 4.999985447978396e+01 $
+
+\end{solution}
+\end{itemize}
+
+\newproblem{4}
+
+\begin{itemize}
+
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+
+\begin{align*}
+cond(BC) &= ||BC|| \cdot ||(BC)^{-1}||\\
+&= ||BC|| \cdot ||C^{-1}B^{-1}||\\
+&\leq ||B|| \cdot ||C|| \cdot ||C^{-1}|| \cdot ||B^{-1}||\\
+&\leq  ||B|| \cdot ||B^{-1}|| \cdot ||C|| \cdot ||C^{-1}||\\
+\implies cond(BC) & \leq cond(B) cond(C)
+\end{align*}
+
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+According to SVD, we know that if $A = USV^T$ then $||A||_2 = \sigma_1$ and $||A^{-1}||_2 = 1/\sigma_n $
+\begin{align*}
+A &= USV^T\\
+\implies A^T &= VS^TU^T\\
+\implies A^T &= VSU^T
+\end{align*}
+This looks very much like the SVD of $A$ except that the orthogonal matrices are interchanged but $S$ remains the same while holding the crucial property that $ \sigma_1 \geq \dots \geq \sigma_n$. Therefore the the maximum in $||A^T||_2 =  \max\limits_{||x||_2 \neq 0} \frac{||A^Tx||_2}{||x||_2} = \max\limits_{||y||_2 = 1} ||A^Ty||_2$ is achieved when $x$ is a multiple of $u_1$. As a result, the unit-norm of vector $y$ for which $||A^T||_2$ is maximized is $u_1$
+
+$ \therefore \max\limits_{||y||_2 = 1} ||A^Ty||_2 = ||A^Tu_1||_2 = \sigma_1 = ||A^T||_2$.  Similar to the arguments given to $||A^{-1}||_2$ in the lecture notes, we can prove that $||(A^{T})^{-1}||_2 = 1/\sigma_n$ as $A$ and $A^T$ are structurally similar in SVD. 
+\begin{align*}
+cond(A^T) &= ||A^T||_2 \cdot ||(A^T)^{-1}||_2\\
+&= \sigma_1/\sigma_n\\
+&= cond(A)
+\end{align*}
+\end{solution}
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+cond(A) &= ||A||_1 \cdot ||A^{-1}||_1 \tag{1}\\
+cond(A^T) &= ||A^T||_1 \cdot ||(A^T)^{-1}||_1\\
+\implies cond(A^T) &= ||A^T||_1 \cdot ||(A^{-1})^{T}||_1 \tag{2}
+\end{align*}
+If we compare (1) and (2), the first term in both the expressions are $||A||_1$ and $||A^T||_1$. We know that the one norm is the maximum column sum of $A$. Since the columns of $A^T$ are the rows of $A$, these two terms will be equal only if the maximum column sum of $A$ = maximum row sum of $A$ i.e.  $||A||_1 = ||A^T||_1 \Leftrightarrow ||A||_1 = ||A||_{\infty}$.
+
+The similar argument holds for the second term in (1) and (2) i.e.\\ $||A^{-1}||_1 = |(A^{-1})^{T}||_1 \Leftrightarrow ||A^{-1}||_1 = ||A^{-1}||_{\infty}$
+
+$\therefore cond(A) = cond(A^T)$ only when both the above conditions hold or if the conditions fail but the products become equal. It easy to choose any $A$ such that these conditions are violated.
+
+Let $A = \begin{pmatrix}
+1 & 3 & 4\\
+0 & 5 & -8\\
+6 & 3 & 0
+\end{pmatrix} \implies ||A||_1 = 12, ||A||_{\infty} = 13 \implies ||A||_1 \neq ||A||_{\infty}$.
+\begin{lstlisting}[frame = single]
+A = [1 3 4; 0 5 -8; 6 3 0];
+x = cond(A,1)
+y = cond(transpose(A),1)
+\end{lstlisting}
+\begin{align*}
+cond(A) = x &=  5.100000000000001e+00\\
+cond(A^T) = y &= 4.333333333333334e+00\\
+\implies cond(A) \neq cond(A^T)
+\end{align*}
+\end{solution}
+
+\end{itemize}
+\newproblem{5}
+
+\begin{itemize}
+\item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+ $ \because A$ is 3 $\times 2$ matrix, $r(A) \leq 2$. But clearly $a_2 = 2a_1$. $\therefore r(A) \neq 2 \implies r(A) = 1$
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+${\rm I\!R(A)}$ includes all the vectors of the form
+\begin{align*}
+A\begin{pmatrix}
+\lambda_1\\
+\lambda_2 \end{pmatrix} = \begin{pmatrix}
+2 & 4\\
+1 & 2\\
+1& 2
+\end{pmatrix} \begin{pmatrix}
+\lambda_1\\
+\lambda_2 \end{pmatrix} = \begin{pmatrix}
+2\lambda_1+4\lambda_2\\
+\lambda_1 + 2\lambda_2\\
+\lambda_1 + 2\lambda_2
+\end{pmatrix} \in {\rm I\!R(A)}
+\end{align*}
+Let $\alpha = \lambda_1 + 2\lambda_2$ where $\alpha$ is a scalar then
+$\lambda = \begin{pmatrix}
+2\alpha\\
+\alpha\\
+\alpha
+\end{pmatrix} \in {\rm I\!R(A)}$
+\end{solution}
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+
+${\rm I\!N(A^T)}$ has the dimension $m-r(A) = 3-1 = 2$. ${\rm I\!R(A^T)}$ contains all the vectors of the form $z$ such that
+\begin{align*}
+A^Tz &= 0\\
+\implies \begin{pmatrix}
+2 & 1 & 1\\
+4 & 2 & 2
+\end{pmatrix} \begin{pmatrix}
+z_1\\
+z_2\\
+z_3
+\end{pmatrix} &= 0
+\implies 2z_1 + z_2 + z_3 &= 0\\
+\implies z &= \begin{pmatrix}
+\gamma_1\\
+\gamma_2\\
+-2\gamma_1 - \gamma_2
+\end{pmatrix} \in {\rm I\!N(A^T)} \text{   where } \gamma_1, \gamma_2 \text{ are any scalars}
+\end{align*}
+Let $\gamma_1 = 1, \gamma_2 = 1 \implies$ $z_1 = \begin{pmatrix}
+1\\
+1\\
+-3
+\end{pmatrix}$
+
+Let $\gamma_1 = 0, \gamma_2 = 1 \implies$ $z_2 = \begin{pmatrix}
+0\\
+1\\
+-1
+\end{pmatrix}$
+\begin{align*}
+\lambda_1z_1 + \lambda_2z_2 &= 0\\
+\implies \lambda_1 = 0, \lambda_1 + \lambda_2 &= 0, 3\lambda_1 + \lambda_2 = 0\\
+\implies \lambda_1 &= \lambda_2 = 0
+\end{align*}
+$\therefore z_1, z_2$ are linearly independent 
+\end{solution}
+
+\item[(d)]
+\ifnum\me<2
+\begin{solution}
+Let $b_R = \begin{pmatrix}
+2\alpha\\
+\alpha\\
+\alpha
+\end{pmatrix} $, $b_N =\begin{pmatrix}
+\gamma_1\\
+\gamma_2\\
+-2\gamma_1 - \gamma_2
+\end{pmatrix}$ 
+\begin{align*}
+\begin{pmatrix}
+3\\
+2\\
+1
+\end{pmatrix} & =\begin{pmatrix}
+2\alpha\\
+\alpha\\
+\alpha
+\end{pmatrix} + \begin{pmatrix}
+\gamma_1\\
+\gamma_2\\
+-2\gamma_1 - \gamma_2
+\end{pmatrix}\\
+\implies 2\alpha + \gamma_1 &= 3\\
+\alpha + \gamma_2 &= 2\\
+\alpha -2\gamma_1 -\gamma_2 &= 1
+\end{align*}
+Solving these three equations, we get 
+$b_R = \begin{pmatrix}
+3\\
+3/2\\
+3/2
+\end{pmatrix}$ and $b_N = \begin{pmatrix}
+0\\
+1/2\\
+-1/2
+\end{pmatrix}$
+\end{solution}
+
+\item[(e)]
+\ifnum\me<2
+\begin{solution}
+${\rm I\!N(A)}$ has dimension $n-r(A) = 1$. ${\rm I\!N(A)}$ contains all the vectors of the form $q$ such that
+\begin{align*}
+Aq &= 0\\
+\implies \begin{pmatrix}
+2 & 4\\
+1 & 2\\
+1 & 2
+\end{pmatrix} \begin{pmatrix}
+q_1\\
+q_2
+\end{pmatrix} &= 0
+\implies q_1 + 2q_2 = 0\\
+\implies q = \begin{pmatrix}
+-2q_2\\
+q_2
+\end{pmatrix} \in {\rm I\!N(A)}
+\end{align*}
+\end{solution}
+
+\item[(f)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+Av &= b_R\\
+\implies \begin{pmatrix}
+2 & 4\\
+1 & 2\\
+1& 2
+\end{pmatrix} \begin{pmatrix}
+v_1\\
+v_2 \end{pmatrix} &= \begin{pmatrix}
+3\\
+3/2\\
+3/2
+\end{pmatrix} \implies v_1 + 2v_2 = 3/2\\
+\implies v &= \begin{pmatrix}
+3/2-2v_2\\
+v_2
+\end{pmatrix}
+\end{align*}
+Let $v_2 = 1/2 \implies v_1 = 1/2 \implies v = \begin{pmatrix}
+1/2\\
+1/2
+\end{pmatrix}$
+\end{solution}
+
+\item[(g)]
+\ifnum\me<2
+\begin{solution}
+\begin{itemize}
+\item Let $v_2 = 1/2 \implies v_1 = 1/2 \implies v = \begin{pmatrix}
+1/2\\
+1/2
+\end{pmatrix}$
+
+Let $q_2 = 1 \implies q = \begin{pmatrix}
+-2\\
+1
+\end{pmatrix}$
+
+$ \implies b_A = \begin{pmatrix}
+-3/2\\
+3/2
+\end{pmatrix}$
+
+\item Let $v_2 = 1 \implies v_1 = -1/2 \implies v = \begin{pmatrix}
+-1/2\\
+1
+\end{pmatrix}$
+
+Let $q_2 = -1 \implies q = \begin{pmatrix}
+2\\
+-1
+\end{pmatrix}$
+
+$ \implies b_A = \begin{pmatrix}
+3/2\\
+0
+\end{pmatrix}$
+\end{itemize}
+\end{solution}
+
+\end{itemize}
+
+
+\end{document}
+
+

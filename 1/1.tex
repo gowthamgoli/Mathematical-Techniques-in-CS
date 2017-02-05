@@ -1,0 +1,671 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{1}  %homework number
+\def\due{Tuesday, September 26}  %due date
+\def\course{CSCI-GA.1180-001 
+} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{mathtools}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ }
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Thenn}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\begin{document}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{1}
+
+\begin{itemize}
+ \item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+Let, 
+\(
+A =
+  \begin{pmatrix}
+    a_{11} & a_{12}\\
+    a_{21} & a_{22}
+  \end{pmatrix} \implies
+A^2 = \begin{pmatrix}
+    a_{11}^2+a_{12}a_{21} & a_{11}a_{12}+a_{12}a_{22}\\
+    a_{21}a_{11}+a_{22}a_{21} & a_{21}a_{12}+a_{22}^2
+  \end{pmatrix} =
+\begin{pmatrix}
+    -1 & 0\\
+    0 & -1
+  \end{pmatrix}
+\)
+
+Therefore, 
+\begin{align}
+ &a_{11}^2+a_{12}a_{21} = -1 \\
+ &a_{11}a_{12} = -a_{22}a_{12}\\
+ &a_{11}a_{21} = -a_{22}a_{21}\\
+ &a_{22}^2 + a_{21}a_{12} = -1
+\end{align}
+From equations (1) and (4), it is clear that $a_{12} \neq 0$ and $a_{21} \neq 0$. Therefore from equations (2) and (4), we can conclude that $a_{11} = -a_{22}$.
+Let $a_{11} = 1, a_{12} = 1 \implies a_{22} = -1$ and $a_{21} = -2$\\ Therefore    \(
+A =
+  \begin{pmatrix}
+    1 & 1\\
+    -2 & -1
+  \end{pmatrix}
+\)
+\end{solution}
+\fi
+
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+Let, 
+\(
+B =
+  \begin{pmatrix}
+    b_{11} & b_{12}\\
+    b_{21} & b_{22}
+  \end{pmatrix} \implies
+B^2 = \begin{pmatrix}
+    b_{11}^2+b_{12}b_{21} & b_{11}b_{12}+b_{12}b_{22}\\
+    b_{21}b_{11}+b_{22}b_{21} & b_{21}b_{12}+b_{22}^2
+  \end{pmatrix} =
+\begin{pmatrix}
+    0 & 0\\
+    0 & 0
+  \end{pmatrix}
+\) 
+Therefore, 
+\begin{align}
+ &b_{11}^2 = -b_{12}b_{21} \\
+ &b_{11}b_{12} = -b_{22}b_{12}\\
+ &b_{11}b_{21} = -b_{22}b_{21}\\
+ &b_{22}^2 = -b_{21}b_{12}
+\end{align}
+From the above equations, it can be easily observed that if $b_{11} = 0$, B becomes zero matrix. So assume, $b_{11} \neq 0$. From equations (5) and (8), we can conclude that, $b_{11}^2 = b_{22}^2$ and $b_{12}b_{21} < 0 \implies (b_{12} - b_{21}) \neq 0$. From equations (6) and (7) we get, $(b_{12} - b_{21})(b_{11}+b_{22}) = 0$. Therefore, $b_{11} = -b{22}$. Let $b_{11} = 1, b_{12} = 1$ then $b_{22} = -1$ and $b_{21} = -1$.\\
+Therefore, \(
+B =
+  \begin{pmatrix}
+    1 & -1\\
+    1 & -1
+  \end{pmatrix}
+\)  
+\end{solution}
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+Let \(
+C =
+  \begin{pmatrix}
+    c_{11} & c_{12}\\
+    c_{21} & c_{22}
+  \end{pmatrix}, 
+D =
+  \begin{pmatrix}
+    d_{11} & d_{12}\\
+    d_{21} & d_{22}
+  \end{pmatrix}
+\) Given that $CD = -DC \implies$
+\begin{align}
+& 2c_{11}d_{11} = -c_{12}d_{21} - d_{12}c_{21}\\
+& c_{11}d_{12} + c_{12}d_{22} = -d_{11}c_{12} - d_{12}c_{22}\\
+& c_{21}d_{11} + c_{22}d_{21} = -d_{21}c_{11} - d_{22}c_{21}\\
+& 2c_{22}d_{22} = -d_{21}c_{12} - c_{21}d_{12}
+\end{align}
+Equations (9), (10) $ \implies c_{11}d_{11} = c_{22}d_{22}$\\ Equations (10), (11) $ \implies c_{12}(d_{11}+d_{22}) = -d_{12}(c_{11}+c_{22})$  and $d_{21}(c_{11}+c_{22}) = -c_{21}(d_{11}+d_{22})$
+
+Let $c_{11} = 1, c_{22} = -1, d_{11} = 1$ then $d_{22} = -1$. Now pick $c_{12} = 1$ and $c_{21} = 1$, from equation (9) we get, $-d_{21}-d_{12} = -2$. Pick $d_{21} = -3$ then $d_{12} = 1$.\\
+Therefore 
+\(
+C =
+  \begin{pmatrix}
+    1 & 1\\
+    1 & -1
+  \end{pmatrix}, 
+D =
+  \begin{pmatrix}
+    1 & 1\\
+    -3 & -1
+  \end{pmatrix}
+\) where \(
+CD =
+  \begin{pmatrix}
+    -2 & 0\\
+    4 & 2
+  \end{pmatrix}
+\) and \(DC =
+  \begin{pmatrix}
+    2 & 0\\
+    -4 & -2
+  \end{pmatrix}
+\)
+
+
+\end{solution}
+\fi
+\end{itemize}
+
+\newproblem{2}
+
+\ifnum\me<2
+\begin{solution}
+\begin{itemize}
+\item If $A$ is a singular matrix, then for any non-zero vector $x$  we know that $Ax \neq 0$
+\item Since $B$ is non singular, there exists a non-zero vector $y$ such that $By = x$. 
+\item Therefore, $Ax \neq 0 \implies A(By) \neq 0 \implies (AB)y \neq 0$ where $y$ is a non-zero matrix.
+\end{itemize}
+$\therefore$ If $A$ and $B$ are non-singular matrices then their product $AB$ is also non-singular.
+\end{solution}
+
+\newproblem{3}
+
+\ifnum\me<2
+\begin{solution}
+
+Given \(
+A =
+  \begin{pmatrix}
+    1 & 8 & 7\\
+    2 & 10 & 8\\
+    3 & 12 & 9
+  \end{pmatrix}
+\)
+\begin{align*}
+	& a_3 = \lambda_1a_1 + \lambda_2a_2\\
+	& \lambda_1 \begin{pmatrix}
+    1 \\
+    2 \\
+    3
+  \end{pmatrix} + \lambda_2 \begin{pmatrix}
+    8 \\
+    10 \\
+    12
+  \end{pmatrix} = \begin{pmatrix}
+    7 \\
+    8 \\
+    9
+  \end{pmatrix} \\
+  \implies & \lambda_1 + 8 \lambda_2 = 7 \tag{1}\\
+  & 2 \lambda_1 + 10 \lambda_2 = 10 \tag{2}\\
+  & 3 \lambda_1 + 12 \lambda_2 = 9 \tag{3}
+\end{align*}
+Solving equations (1) and (2), we get $\lambda_1 = -1$ and $\lambda_2 = 1$. Substitute these values in (3), we get $-3 + 12 = 9$. Therefore the columns of the matrix are linearly dependent.
+\end{solution}
+
+\newproblem{4}
+
+\ifnum\me<2
+\begin{solution}
+
+\begin{theorem}
+Let $A$ be an $n \times n$ real matrix. If the only solution of $Ay = 0$ is $y = 0$ then prove that there is a unique n-vector $x$ satisfying $Ax = b$ for any nonzero $n$-vector $b$ 
+\end{theorem}
+\begin{proof}
+
+Let us assume that there are two vectors $x_1$ and $x_2$  where $x_1 \neq x_2$ such that $Ax_1 = b$ and $Ax_2 = b \implies A(x_1-x_2) = 0$. But we know that if $Ay = 0 \implies y$ has to be zero. Therefore, $(x_1 - x_2) = 0 \implies x_1 = x_2$. 
+
+This is a contradiction to the given hypothesis. Thus our assumption was wrong i.e. $x_1$ and $x_2$ should be equal. Hence, there is a unique n-vector $x$ satisfying $Ax = b$ for any nonzero $n$-vector $b$ if the only solution of $Ay = 0$ is $y = 0$
+\end{proof}
+
+\begin{theorem}
+Let $A$ be an $n \times n$ real matrix. If there is a unique n-vector $x$ satisfying $Ax = b$ for any nonzero $n$-vector $b$ then prove that the only solution of $Ay = 0$ is $y = 0$. 
+\end{theorem}
+\begin{proof}
+Let us assume that there exists a non-zero vector $y$ such that $Ay = 0$. We know that $Ax = b$ where $x$ is a unique $n$-vector and $b$ is a non-zero vector. Adding these two equations, we get $A(x+y) = b$ where $x+y \neq  x$ since $y$ is a non-zero vector.
+
+This is a contradiction to the given hypothesis. Thus our assumption was wrong i.e. $y$ can not be a non-zero vector. Hence, the only solution of $Ay = 0$ is $y = 0$ if there is a unique n-vector $x$ satisfying $Ax = b$ for any nonzero $n$-vector $b$.
+\end{proof}
+\end{solution}
+
+\newproblem{5}
+
+\begin{itemize}
+\item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+If columns of $A$ are linearly independent then $Az = 0$ only if $z = 0$.
+
+If $Ax = Ay \implies A(x-y) = 0$. Given that the columns of $A$ are linearly independent, $\therefore x-y = 0 \implies x = y$
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+\(
+A =
+  \begin{pmatrix}
+    -1 & 2 & 3\\
+    0 & -2 & 1
+  \end{pmatrix}
+ x =
+  \begin{pmatrix}
+    1\\
+    2\\
+    3 
+  \end{pmatrix} \implies Ax =
+  \begin{pmatrix}
+    12\\
+    -1
+  \end{pmatrix} \)
+  
+  Let \(
+  y =
+  \begin{pmatrix}
+    5\\
+    \lambda_2\\
+    4 
+  \end{pmatrix} \implies Ay = \begin{pmatrix}
+    12\\
+    -1
+  \end{pmatrix}
+\)
+
+Solve for $\lambda_2$, we get $\lambda_2 = 5/2$
+\(\therefore y = y =
+  \begin{pmatrix}
+    5\\
+    5/2\\
+    4 
+  \end{pmatrix}\)
+\end{solution}
+\end{itemize}
+
+\newproblem{6}
+
+\ifnum\me<2
+\begin{solution}
+
+Rank of $A$ is equal to the maximum number of linearly independent rows and columns of $A$ (which are equal). Thus $r \leq m$ and $r \leq n$. But it is given that $r = m$. Therefore $m \leq n$
+\end{solution}
+
+\newproblem{7}
+
+\ifnum\me<2
+\begin{solution}
+
+Assume that both (1) and (2) are true
+\begin{align*}
+y^Tb &= y^T (Ax) & \textit{Using (1)}\\
+&= (y^TA)x	& \textit{Associative property of Matrix Multiplication}\\
+&= ((y^TA)^T)^Tx\\
+&= (A^Ty)^Tx\\
+&= 0^Tx & \textit{Using (2)}\\
+&= 0
+\end{align*}
+But from (2), we know that $y^Tb \neq 0$. This is a contradiction. Thus our assumption was wrong, (1) and (2) cannot both be true and thus they are contradictory.
+\end{solution}
+
+\newproblem{8}
+
+\begin{itemize}
+\item[(a)] 
+
+\ifnum\me<2
+\begin{solution}
+
+Given that $x_R$ is the linear combination of columns of $A$. Therefore, there is a $n$ vector $y$ such that $Ay = x_R$.
+\begin{align*}
+x_R^Tx_N &= (Ay)^Tx_N \\
+&= (y^TA^T)x_N \\
+&= y^T(A^Tx_N) &\textit{Associative property of Matrix Multiplication}\\
+&= y^T0\\
+&= 0
+\end{align*}
+Hence proved
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+Let us assume that $x_R$ and $x_N$ are not unique. Let $\exists \,\,x_{R_1}, x_{R_2} \in {\Bbb R}(A)$ and $x_{N_1}, x_{N_2} \in {\Bbb N}(A^T)$  where $x_{R_1} \neq x_{R_2}$ and $x_{N_1} \neq x_{N1_2}$ such that
+\begin{align*}
+& x = x_{R_1} + x_{N_1}\\
+& x = x_{R_2} + x_{N_2}\\
+& \text{Subtracting these two equations we get}\\
+& 0 = (x_{R_1} - x_{R_2}) + (x_{N_1} - x_{N_2})\\
+& x_{R_1} - x_{R_2} = -(x_{N_1} - x_{N_2})\tag{1}\\
+\end{align*}
+But we know that Range space and Null space are closed under addition and subtraction. $\therefore (x_{R_1} - x_{R_2}) \in {\Bbb R}(A)$ and $(x_{N_1} - x_{N_2})\in {\Bbb N}(A^T) \implies (x_{R_1} - x_{R_2}) \perp (x_{N_1} - x_{N_2})$ but from (1) we have,  $(x_{R_1} - x_{R_2}) \parallel (x_{N_1} - x_{N_2}) \implies (x_{R_1} - x_{R_2}) = 0$ and $(x_{N_1} - x_{N_2}) = 0 \implies$\\ $ x_{R_1} = x_{R_2}$ and $x_{N_1} = x_{N_2}$
+
+This is a contradiction. Hence our assumption was wrong. Therefore $x_R$ and $x_N$ are unique.
+\end{solution}
+
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+
+It is given that $x_R \neq 0$ and $x_N \neq 0$
+
+Assume that $\lambda_1 \neq 0$ and $\lambda_2 \neq 0$ such that 
+$\lambda_1 x_R + \lambda_2 x_N = 0 \implies x_R$ and $x_N$ are parallel but we also know that $x_R$ and $x_N$ are perpendicular to each other $\because x_R \in 
+{\Bbb R}(A)$ and $x_n \in {\Bbb N}(A^T) \implies$ \\ $ x_R = x_N = 0$. But this a contradiction to the given hypothesis. Hence our assumption is wrong.
+Therefore if $x_R$ and $x_N$ are both nonzero then they are linearly independent.  
+\end{solution}
+\end{itemize}
+
+\newproblem{9}
+
+\begin{itemize}
+\item[(a)] 
+
+\ifnum\me<2
+\begin{solution}
+
+Given that $C$ is an $m \times n$ matrix with full column rank. Hence all the columns of $C$ are linearly independent. Therefore $Cy = 0 \implies y = 0$. Assume there are two vectors $x_1$ and $x_2$ such that $Cx_1 = d$ and $Cx_2 = d$. $\implies C(x_1 - x_2) = 0$. But we know that if $cy = 0$, $y = 0$. $\therefore x_1 - x_2 = 0 \implies x_1 = x_2$. Therefore $x$ is unique
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+We know $\exists$ unique $x_R, x_N$ such that $b = x_R + x_N$ and $\exists\,\,y$ such that $x_R = Ay \because x_R \in {\Bbb R}(A)$
+
+$ \implies b = Ax = Ay + x_N \implies Ax-Ay = X_N \implies Ax-Ay \parallel x_N$. 
+
+$Ax-Ay \in {\Bbb R}(A)$ using closure property of Range space $\implies Ax-Ay \perp X_N$
+
+$\therefore Ax-Ay = 0 \implies x=y$. We are sure that $\exists\,\,y$ for the unique $x_R \implies x$ exists too.
+
+$\therefore$ The system $Ax = b$ is compatible $\forall b \in {\Bbb R}^m$
+\end{solution}
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+
+The rank of the $2 \times 4$ matrix cannot be two because if it is 2 then from part (b) the system $Ax = b$ is compatible for every $b \in {\Bbb R}^m$. So choose a matrix whose rank is 1 and columns are linearly independent. It easy to choose such a matrix. Choose the columns such that they are multiples of column 1, so they are linearly dependent.
+
+Let \(
+A =
+  \begin{pmatrix}
+    a_1\,a_2\,a_3\,a_4
+  \end{pmatrix} \) where \(a_1 = \begin{pmatrix}
+    1\\
+    2
+  \end{pmatrix} \) $a_2 = 2a_1, a3 = 3a_1, a_4 = 4a_1$.
+  
+\( \therefore A = \begin{pmatrix}
+    1 & 2 & 3 & 4\\
+    2 & 4 & 6 & 8
+  \end{pmatrix} \implies \)
+\( b = Ax = \begin{pmatrix}
+    x_1 + 2x_2 + 3x_3 + 4x_4\\
+    2x_1 + 4x_2 + 6x_3 + 8x_4
+  \end{pmatrix} \in {\Bbb R}(A) \)
+  
+$\therefore {\Bbb R}(A)$ consists of only those vectors such that $b_2 = 2b_1$. Choose any vector $b$ that violates this property. Let \( b = \begin{pmatrix}
+    2\\
+    5
+  \end{pmatrix} \). Therefore for the chosen $A, b$ the system $Ax = b$ is not compatible.
+\end{solution}
+\end{itemize}
+
+
+\newproblem{10}
+
+\begin{itemize}
+\item[(a)] 
+
+\ifnum\me<2
+\begin{solution}
+
+Let \(
+A =
+  \begin{pmatrix}
+    a_1\,a_2\,a_3\,a_4\,a_5
+  \end{pmatrix} \) where $a_i$ is a 2 dimensional vector.
+Given that the $rank(A) = 2$ and the 2 $\times$ 2 submatrix consisting of the first two columns of $A$ has rank 1. Therefore $a_1$ and $a_2$ should be linearly dependent on each other. Hence choose $a_2 = 2a_1$ where \(a_1 =
+  \begin{pmatrix}
+    1\\
+    2
+  \end{pmatrix} \) and \(a_2 =
+  \begin{pmatrix}
+    2\\
+    4
+  \end{pmatrix} \). Clearly $a_1$ and $a_2$ are linearly dependent. Thus $(a_1 a_2)$ has rank 1. Now we need to choose $a_3, a_4, a_5$ such that the maximum number of linear independent columns are only 2. Let \(a_5 =
+  \begin{pmatrix}
+    5\\
+    9
+  \end{pmatrix} \). Therefore $a_1, a_5$ and $a_2, a_5$ are linearly independent but $a_1, a_2, a_5$ are linearly dependent $\because a_2 = 2a_1 + 0a_5$. Thus the rank of the matrix constructed thus far is 2. Now choose $a_3, a_4$ such that the maximum number of linearly independent columns still remains to be 2. Simply choose $a_3, a_4$ to be multiples of $a_1$ so that $a_i, a_5$ for $i = 1,\ldots,4$ are linearly independent. Therefore \(A =
+  \begin{pmatrix}
+    1 & 2 & 3 & 4 & 5\\
+    2 & 4 & 6 & 8 & 9
+  \end{pmatrix} \)
+
+$a_1$, $a_2$ are linearly dependent \textbf{(confirms (i))}
+
+$a_1 + a_ 4 = a_2 + a_3 + 0a_5 \implies$ Rank cannot be 5
+
+Randomly choose any 4 columns from $A$, if $a_5$ is one of the chosen columns, then simply choose the coefficient of $a_5$ to be 0 and the remaining columns will be linearly dependent on each other as they are all multiples of $a_1$. If $a_5$ is not chosen then it is straight forward that all the columns will be linearly dependent. A similar argument can be given for choosing any 3 columns from $A \implies$ Rank cannot be 3, 4
+
+Choose $a_1, a_5$, $\lambda_1a_1 + \lambda_2a_5 = 0 \implies \lambda_1 = -5\lambda$ and $2\lambda_1 = -9\lambda_2 \implies \lambda_1 = \lambda2 = 0 \therefore$ the rank of the matrix is 2  \textbf{(confirms (ii))}
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+Let \(x =
+  \begin{pmatrix}
+    x_1\\
+    x_2\\
+    x_3\\
+    x_4\\
+    x_5
+  \end{pmatrix} \implies b = Ax = \begin{pmatrix}
+    x_1 + 2x_2 + 3x_3 + 4x_4 + 5x_5\\
+    2(x_1 + 2x_2 + 3x_3 + 4x_4) + 9x_5
+  \end{pmatrix}\)
+  
+For \(x =
+  \begin{pmatrix}
+    1\\
+    1\\
+    1\\
+    1\\
+    1
+  \end{pmatrix} \implies b = \begin{pmatrix}
+    15\\
+    29
+  \end{pmatrix}\)
+\end{solution}
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+
+Let $x_1 + 2x_2 + 3x_3 + 4x_4 = k$, then \(b = Ax = \begin{pmatrix}
+    k + 5x_5\\
+    2k + 9x_5
+  \end{pmatrix} \in range(A)\)
+ 
+ For any 2-vector $b$ the system of linear equations can be solved to get the values of $k$ and $x_5$. Using $k$ choose $x_1,x_2,x_3,x_4$ such that $x_1 + 2x_2 + 3x_3 + 4x_4 = k$ i.e. $\forall b \,\,\exists x$ such that $b = Ax$
+ 
+$\therefore$ It is not possible to find any such $b \not \in range(A)$  
+\end{solution}
+
+\item[(d)]
+\ifnum\me<2
+\begin{solution}
+
+ \(A^T = \begin{pmatrix}
+   1 & 2\\
+   2 & 4\\
+   3 & 6\\
+   4 & 8\\
+   5 & 9\\
+  \end{pmatrix} \implies b = A^Tx = \begin{pmatrix}
+   x_1+2x_2\\
+   2x_1+4x_2\\
+   3x_1+6x_2\\
+   4x_1+8x_2\\
+   5x_1+9x_2\\
+  \end{pmatrix} \in range(A^T)\)
+
+Notice that rows 2 to 4 of $b$ are multiples of row 1. Choose $c$ such that $c$ violates this property.
+\( \therefore c = \begin{pmatrix}
+   3\\
+   7\\
+   10\\
+   11\\
+   14\\
+  \end{pmatrix} \not\in range(A^T)\)
+
+\end{solution}
+\end{itemize}
+
+\end{document}
+
+

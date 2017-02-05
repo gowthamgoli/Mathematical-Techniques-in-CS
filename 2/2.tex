@@ -1,0 +1,658 @@
+%me=0 student solutions (ps file), me=1 - my solutions (sol file), me=2 - assignment (hw file)
+\def\me{0}
+\def\num{2}  %homework number
+\def\due{Wednesday, October 5}  %due date
+\def\course{CSCI-GA.1180-001 
+} %course name, changed only once
+\def\name{GOWTHAM GOLI (N17656180)}   %student changes (instructor keeps!)
+%
+\iffalse
+INSTRUCTIONS: replace # by the homework number.
+(if this is not ps#.tex, use the right file name)
+
+  Clip out the ********* INSERT HERE ********* bits below and insert
+appropriate TeX code.  Once you are done with your file, run
+
+  ``latex ps#.tex''
+
+from a UNIX prompt.  If your LaTeX code is clean, the latex will exit
+back to a prompt.  To see intermediate results, type
+
+  ``xdvi ps#.dvi'' (from UNIX prompt)
+  ``yap ps#.dvi'' (if using MikTex in Windows)
+
+after compilation. Once you are done, run
+
+  ``dvips ps#.dvi''
+
+which should print your file to the nearest printer.  There will be
+residual files called ps#.log, ps#.aux, and ps#.dvi.  All these can be
+deleted, but do not delete ps1.tex. To generate postscript file ps#.ps,
+run
+
+  ``dvips -o ps#.ps ps#.dvi''
+
+I assume you know how to print .ps files (``lpr -Pprinter ps#.ps'')
+\fi
+%
+\documentclass[11pt]{article}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage[lined,boxed,linesnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{epsfig}
+\usepackage{psfrag}
+\usepackage{color}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{mathtools}
+\usepackage{float}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\evensidemargin}{.0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1, Page \arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf \course} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\newcounter{pppp}
+\newcommand{\prob}{\arabic{pppp}}  %problem number
+\newcommand{\increase}{\addtocounter{pppp}{1}}  %problem number
+
+%first argument desription, second number of points
+\newcommand{\newproblem}[2]{
+\ifnum\me=0
+\ifnum\prob>0 \newpage \fi
+\increase
+\setcounter{page}{1}
+\handout{\name, Homework \num, Problem \arabic{pppp}}{\today}{Name: \name}{Due:
+\due}{Solutions to Problem \prob\ of Homework \num\ }
+\else
+\increase
+\section*{Problem \num-\prob~(#1) \hfill {#2}}
+\fi
+}
+
+%\newcommand{\newproblem}[2]{\increase
+%\section*{Problem \num-\prob~(#1) \hfill {#2}}
+%}
+
+\def\squarebox#1{\hbox to #1{\hfill\vbox to #1{\vfill}}}
+\def\qed{\hspace*{\fill}
+        \vbox{\hrule\hbox{\vrule\squarebox{.667em}\vrule}\hrule}}
+\newenvironment{solution}{\begin{trivlist}\item[]{\bf Solution:}}
+                      {\qed \end{trivlist}}
+\newenvironment{solsketch}{\begin{trivlist}\item[]{\bf Solution Sketch:}}
+                      {\qed \end{trivlist}}
+\newenvironment{code}{\begin{tabbing}
+12345\=12345\=12345\=12345\=12345\=12345\=12345\=12345\= \kill }
+{\end{tabbing}}
+
+%\newcommand{\eqref}[1]{Equation~(\ref{eq:#1})}
+
+\newcommand{\hint}[1]{({\bf Hint}: {#1})}
+%Put more macros here, as needed.
+\newcommand{\room}{\medskip\ni}
+\newcommand{\brak}[1]{\langle #1 \rangle}
+\newcommand{\bit}[1]{\{0,1\}^{#1}}
+\newcommand{\zo}{\{0,1\}}
+\newcommand{\C}{{\cal C}}
+
+\newcommand{\nin}{\not\in}
+\newcommand{\set}[1]{\{#1\}}
+\renewcommand{\ni}{\noindent}
+\renewcommand{\gets}{\leftarrow}
+\renewcommand{\to}{\rightarrow}
+\newcommand{\assign}{:=}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+\newcommand{\Forr}{\mbox{\bf For }}
+\newcommand{\To}{\mbox{\bf to }}
+\newcommand{\Do}{\mbox{\bf Do }}
+\newcommand{\Ifi}{\mbox{\bf If }}
+\newcommand{\Thenn}{\mbox{\bf Then }}
+\newcommand{\Elsee}{\mbox{\bf Else }}
+\newcommand{\Whilee}{\mbox{\bf While }}
+\newcommand{\Repeatt}{\mbox{\bf Repeat }}
+\newcommand{\Until}{\mbox{\bf Until }}
+\newcommand{\Returnn}{\mbox{\bf Return }}
+\newcommand{\Swap}{\mbox{\bf Swap }}
+
+\begin{document}
+
+\ifnum\me=0
+%\handout{PS\num}{\today}{Name: **** INSERT YOU NAME HERE ****}{Due:
+%\due}{Solutions to Problem Set \num}
+%
+%I collaborated with *********** INSERT COLLABORATORS HERE (INDICATING
+%SPECIFIC PROBLEMS) *************.
+\fi
+\ifnum\me=1
+\handout{PS\num}{\today}{Name: Yevgeniy Dodis}{Due: \due}{Solution
+{\em Sketches} to Problem Set \num}
+\fi
+\ifnum\me=2
+\handout{PS\num}{\today}{Lecturer: Yevgeniy Dodis}{Due: \due}{Problem
+Set \num}
+\fi
+
+\newproblem{1}
+
+\begin{itemize}
+ \item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+Let 
+\(
+A =
+  \begin{pmatrix}
+    a_{11} & a_{0}\\
+    a_{0} & a_{22}
+  \end{pmatrix}
+B =
+  \begin{pmatrix}
+    b_{11} & b_{0}\\
+    b_{0} & b_{22}
+  \end{pmatrix}\) so that $A = A^T$ and $B = B^T$
+ 
+If $AB$ is not symmetric $\implies (AB) \neq (AB)^T \implies AB \neq B^TA^T \implies AB \neq BA$ 
+
+\(
+AB = \begin{pmatrix}
+    a_{11}b_{11}+a_0b_0 & a_{11}b_0+a_0b_{22}\\
+    a_{0}b_{11}+a_{22}b_0 & a_{0}b_0+a_{22}b_{22}
+  \end{pmatrix}
+BA = \begin{pmatrix}
+    a_{11}b_{11}+a_0b_0 & a_{0}b_{11}+b_0a_{22}\\
+    b_{0}a_{11}+b_{22}a_0 & a_{0}b_0+a_{22}b_{22}
+  \end{pmatrix}
+\)
+
+
+If $AB = BA$
+\begin{align*}
+a_{11}b_0+a_0b_{22} = a_{0}b_{11}+b_0a_{22}\\
+a_{0}b_{11}+a_{22}b_0 = b_{0}a_{11}+b_{22}a_0
+\end{align*}
+
+From the above two equations, we get $b_0(a_{11}-a_{22}) = a_0(b_{11}-b_{22})$. Let $a_0 = 1, b_0 = 1$ then $a_{11}-a_{22} = b_{11}-b_{22}$. It is easy to choose any values so that this equation is violated.
+\( \therefore A =
+  \begin{pmatrix}
+    4 & 1\\
+    1 & 3
+  \end{pmatrix}
+B = \begin{pmatrix}
+    3 & 1\\
+    1 & 0
+  \end{pmatrix} \implies
+AB = \begin{pmatrix}
+    13 & 4\\
+    6 & 1
+  \end{pmatrix}\)
+
+Clearly $AB$ is not symmetric
+\end{solution}
+\fi
+
+\item[(b)] 
+\ifnum\me<2
+\begin{solution}
+
+From part (a), if $AB = BA$, we have $b_0(a_{11}-a_{22}) = a_0(b_{11}-b_{22})$
+ 
+Let $a_0 = 1, b_0 = 1$ and $a_{11}-a_{22} = b_{11}-b_{22} = 2$
+
+\( \therefore A =
+  \begin{pmatrix}
+    4 & 1\\
+    1 & 2
+  \end{pmatrix}
+B = \begin{pmatrix}
+    3 & 1\\
+    1 & 1
+  \end{pmatrix} \implies
+AB = \begin{pmatrix}
+    13 & 5\\
+    5 & 3
+  \end{pmatrix}\)
+  
+Clearly $AB$ is symmetric
+\end{solution}
+\fi
+
+\item[(c)] 
+\ifnum\me<2
+\begin{solution}
+
+From part(a), if \(
+A =
+  \begin{pmatrix}
+    a_{11} & a_{0}\\
+    a_{0} & a_{22}
+  \end{pmatrix}
+B =
+  \begin{pmatrix}
+    b_{11} & b_{0}\\
+    b_{0} & b_{22}
+  \end{pmatrix}\)
+  
+then we have $b_0(a_{11}-a_{22}) = a_0(b_{11}-b_{22})$ (this equation has already derived in part (a))
+\end{solution}
+\fi
+\end{itemize}
+
+\newproblem{2}
+
+\begin{itemize}
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+Assume that all the diagonal elements of $R$ are non-zero i.e $r_{ii} \neq 0 \,\, \forall i$ and $R$ is a singular a matrix $\therefore \exists$ a non zero vector $y$ such that $Ry$ = 0
+\begin{align*}
+& \begin{pmatrix}
+r_{11} & r_{12} & \dots & r_{1n}\\
+	   & \ddots &  	    & 		\\
+	   &	    & r_{n-1, n-1} & r_{n-1,n}\\
+	   &		&			   & r_{nn} 
+\end{pmatrix}\begin{pmatrix}
+	   y_1\\
+	   \vdots\\
+	   y_{n-1}\\
+	   y_n
+	   \end{pmatrix} = 0\\
+\implies & \begin{pmatrix}
+	   r_{11}y_1 + r_{12}y_2 + \dots + r_{1n}y_n\\
+	   \vdots\\
+	   r_{n-1,n-1}y_{n-1} + r_{n-1,n}y_{n}\\
+	   r_{nn}y_{n}
+	   \end{pmatrix} = 0\\
+\implies & r_{nn}y_n = 0 \implies y_n = 0 \because r_{nn} \neq 0\\ 
+\implies & r_{n-1, n-1}y_{n-1} = 0 \implies y_{n-1} = 0 \because r_{n-1, n-1} \neq 0\\
+& \vdots\\
+\implies & r_{11}y_1  = 0 \implies y_1 = 0 \because r_{11} \neq 0\\
+\implies & y = 0
+\end{align*}
+But we know that $y$ is a non zero matrix. This a contradiction. Hence our assumption was wrong. Therefore $R$ is singular only if atleast one of the diagonal elements is zero
+\end{solution}
+
+\item[(b)]
+\begin{solution}
+
+The answer is No. Consider a simple $2 \times 2$ triangular matrix with all it's diagonal elements to be 0. Let $A = \begin{pmatrix}
+0 & 1\\
+0 & 0
+\end{pmatrix}$. In this case, $n = 2, k =2$ but $r(A) = 1 \neq n-k$
+\end{solution}
+
+\end{itemize}
+\newproblem{3}
+
+Given $E = I-\alpha xy^T$
+\begin{itemize}
+\item[(a)] 
+\ifnum\me<2
+\begin{solution}
+
+\begin{theorem}
+If E is singular then $\alpha x^Ty=1$
+\end{theorem}
+\begin{proof}
+If $ = 0$ or $y = 0$ or $\alpha = 0$ then $E=I$ which is non-singular. Hence assume that $x \neq 0$, $y \neq 0$, $\alpha \neq 0$. 
+If $E$ is singular then there will be a non zero vector $z$ such that $Ez = 0$
+\begin{align*}
+& Ez = 0\\
+\implies &(I-\alpha xy^T)z = 0 \\
+\implies & z - \alpha x(y^Tz) = 0 \tag{1}\\
+\implies & z - \alpha\beta x = 0 \,\,\,(\text{let } y^Tz = \beta \text{ where } \beta \text{ is some scalar})\\
+\implies &z = \alpha\beta x
+\end{align*}
+We know that $z$ is non zero and $\alpha \neq 0, x \neq 0 \implies \beta \neq 0$. Let $\gamma = \alpha \beta \neq 0 \implies z = \gamma x$. Substitute this value in (1), we get
+\begin{align*}
+& \gamma x - \alpha x (y^T \gamma x) = 0\\
+& \gamma x(1 - \alpha y^T x) = 0
+\end{align*}
+We know that $\gamma \neq 0, x \neq 0 \implies 1 - \alpha y^T x = 0 \implies  \alpha y^Tx = 1 \implies \alpha x^Ty = 1$
+\end{proof}
+
+\begin{theorem}
+If $\alpha x^Ty=1$ then $E$ is singular
+\end{theorem}
+\begin{proof}
+If $ = 0$ or $y = 0$ or $\alpha = 0$ then $\alpha x^Ty \neq 1$.  Hence assume that $x \neq 0$, $y \neq 0$, $\alpha \neq 0$.
+Let us suppose that $E$ is non singular. $\therefore Ez = 0 \implies z = 0$
+\end{proof}
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+Let $E^{-1} = I-\beta xy^T$
+\begin{align*}
+&EE^{-1} = I\\
+\implies & (I - \alpha xy^T)(I-\beta xy^T) = I\\
+\implies & I - \beta xy^T - \alpha xy^T + \alpha\beta (xy^T)(xy^T) = I\\
+\implies & \alpha xy^T + \beta xy^T - \alpha\beta (xy^T)(xy^T) = 0 \tag{1}\\
+\end{align*}
+Consider $xy^Txy^T = x(y^Tx)y^T$, $y^Tx$ is a scalar $\implies xy^Txy^T = (y^Tx)(xy^T)$. Substitute this value in the above equation
+\begin{align*}
+\implies & \alpha xy^T + \beta xy^T - \alpha\beta (y^Tx)(xy^T) = 0 \\
+\implies & xy^T(\alpha + \beta - \alpha\beta y^Tx) = 0\\
+\implies & \alpha + \beta - \alpha\beta y^Tx = 0\\
+\implies & \beta(\alpha y^Tx-1) = \alpha\\
+\implies & \beta(\alpha x^Ty-1) = \alpha\\
+\implies & \beta = \frac{\alpha}{\alpha x^Ty - 1}
+\end{align*}
+
+\end{solution}
+\end{itemize}
+
+\newproblem{4}
+
+\ifnum\me<2
+\begin{solution}
+Given $Z = xy^T$\\
+\begin{align*}
+& Z^k = (xy^T)^k\\
+\implies &Z^k = \underbrace{(xy^T)(xy^T)(xy^T)\ldots(xy^T)}_{\text{k times}}
+\end{align*}
+Consider $(xy^T)(xy^T) = x(y^Tx)y^T$, $y^Tx$ is a scalar $\implies (xy^T)(xy^T) = (y^Tx)(xy^T)$. Substitute this in the above equation
+\begin{align*}
+\implies Z^k &= (y^Tx)\underbrace{(xy^T)(xy^T)\ldots(xy^T)}_{\text{k-1 times}}\\
+& = (y^Tx)(y^Tx)\underbrace{(xy^T)(xy^T)\ldots(xy^T)}_{\text{k-2 times}}\\
+& = \vdots\\
+& = (y^Tx)^{k-1}(xy^T)\\
+\implies Z^k & = (y^Tx)^{k-1}z
+\end{align*}
+\end{solution}
+\newproblem{5}
+
+\begin{itemize}
+\item[(a)] 
+ 
+\ifnum\me<2
+\begin{solution}
+
+Since $A$ is $5 \times 3$ matrix, the rank has to be $ \leq 3$. Check if the three columns of $A$ are linearly independent or not. If not, check if any two columns are linearly independent. If not, then the rank has to be one.
+\begin{enumerate}
+\item Check if $r(A) = 3$
+\begin{align*}
+& x_1 \begin{pmatrix}
+	3\\2\\1\\2\\6
+\end{pmatrix} + x_2\begin{pmatrix}
+	3\\-3\\6\\0\\3
+\end{pmatrix} + x_3\begin{pmatrix}
+	6\\6\\0\\1\\0
+\end{pmatrix} = 0\\
+\implies & x_1+x_2+2x_3 = 0 \tag{1}\\
+& 2x_1 - 3x_2 + 6x_3 = 0 \tag{2}\\
+& x_1 + 6x_2 = 0 \tag{3}\\
+& 2x_1 + x_3 = 0 \tag{4}\\
+& 2x_1 + x_2 = 0 \tag{5}
+\end{align*}
+Solving (3) and (5), we get $x_1 = x_2 = 0$, substitute these values in (1), we get $x_3$ = 0 $\therefore r(A) = 3$
+\end{enumerate}
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+\begin{align*}
+& x_1 \begin{pmatrix}
+	3\\2\\1\\2\\6
+\end{pmatrix} + x_2\begin{pmatrix}
+	3\\-3\\6\\0\\3
+\end{pmatrix} + x_3\begin{pmatrix}
+	6\\6\\0\\1\\0
+\end{pmatrix} = \begin{pmatrix}
+	4\\3\\1\\-1\\-5
+\end{pmatrix} \\
+\implies & 3x_1+3x_2+6x_3 = 4 \tag{1}\\
+& 2x_1 - 3x_2 + 6x_3 = 3 \tag{2}\\
+& x_1 + 6x_2 = 1 \tag{3}\\
+& 2x_1 + x_3 = -1 \tag{4}\\
+& 6x_1 + 3x_2 = -5 \tag{5}
+\end{align*}
+Solving (3) and (5), we get $x_1 = -1, x_2 = 1/3$, substitute these values in (4), we get $x_3 = 1$. Now substitute these values in (1) and (2) to check if they satisfy those equations.
+
+Substitute in (1) $\implies$ 3(-1) + 3(1/3) + + 6(1) = 4
+
+Substitute in (2) $\implies$ 2(-1) - 3(1/3) + + 6(1) = 3
+
+$\therefore B$ lies in the range of $A$
+\end{solution}
+
+\item[(c)]
+\ifnum\me<2
+\begin{solution}
+
+Consider rows 3,4,5 of $A \implies $
+$y_1 (1\,\,6\,\,0) + y_2 (2\,\,0\,\,1) + y_3 (6\,\,3\,\,0) = 0$
+\begin{align*}
+& y_1 + 2y_2 + 6y_3 = 0\\
+& 6y_1 + 3y_3 = 0\\
+& y_2 = 0\\
+& \text{Substitue } y_2 \text{ in the above equations and solving we get}\\
+\implies & y_1 = y_3 = 0
+\end{align*}
+
+Consider rows 1,2,4  of $A \implies $
+$y_1 (3\,\,3\,\,6) + y_2 (2\,\,-3\,\,6) + y_3 (2\,\,0\,\,1) = 0$
+\begin{align*}
+& 3y_1 + 2y_2 + 2y_3 = 0\\
+& 3y_1 -3y_2 = 0\\
+& 6y_1 + 6y_2 + y_3 = 0\\
+\implies & y_1 = y_2\\
+& \text{Substitue } y_1 = y_2 \text{ in the above equations and solving we get}\\
+& y_1 = y_2 = y_3 = 0
+\end{align*}
+Therefore rows 1,2,4 and rows 3,4,5 are linearly independent rows
+\end{solution}
+
+\item[(d)]
+\begin{solution}
+
+\end{solution}
+
+\item[(e)]
+\begin{solution}
+
+Since the columns of $A$ are linearly independent, if there is a solution to $Ax = b$ it has to be unique.
+
+Assume that there exists more than one solution then $Ax_1 = b$ and $Ax_2 = b \implies A(x_1 - x_2) = 0 \implies x_1 - x_2 = 0 \,\,(\because$ the columns of $A$ are linearly independent) $\implies x_1 = x_2$
+\end{solution}
+
+\end{itemize}
+
+
+\newproblem{6}
+
+\ifnum\me<2
+\begin{itemize}
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+
+Suppose that $A^TA$ is singular $\implies \exists$ a non zero vector $z$ such that
+
+$(A^TA)z = 0 \implies z^T(A^TA)z = 0 \implies (Z^TA^T)(AZ) = 0 \implies (AZ)^T(AZ)= 0$
+
+$\therefore ||Az||_2^2 = 0 \implies Az = 0$ but since the columns of $A$ are linearly independent $\implies$\\ if $Az = 0$ then $z = 0$. This is a contradiction. Hence our assumption is wrong. Therefore $(A^TA)$ is non singular.
+\end{solution}
+
+\item[(b)]
+\ifnum\me<2
+\begin{solution}
+
+If $A$ has linearly independent columns then $\exists$ a non-zero vector $z$ such that $Az = 0$
+
+$Az = 0 \implies A^T(Az) = 0 \implies (A^TA)z = 0$ where $z$ is non-zero $\implies (A^TA)$ is singular
+
+\end{solution}
+\end{itemize}
+
+\newproblem{7}
+
+\begin{itemize}
+\item[(a)]
+\begin{solution}
+
+\begin{enumerate}
+\item $||A|| > 0$ if $A \neq 0$ and $||0|| = 0$
+
+If $A \neq 0$ then $max_{i,j} |a_{ij}| > 0$ as $\exists$ atleast one $a_{ij} \neq 0$ and $|a_{ij}| > 0 \implies ||A|| > 0$
+
+If $A = 0$ then $a_{ij} = 0 \,\, \forall i,j \implies |a_{ij}| = 0 \,\, \forall i,j \implies max_{i,j} |a_{ij}| = 0 \implies ||A|| = 0$
+
+\item $||\gamma A|| = |\gamma| \,||A||$ for any scalar $\gamma$
+
+In $\gamma A$, each element of $A$ is multiplied by $\gamma$. Therefore $i,j$ element now becomes $\gamma a_{ij}$. If $a_{ij}$ is the largest absolute value of any element in $A$ then $\gamma a_{ij}$ is the largest absolute value of any element in $\gamma A$ and $|\gamma a_{ij}| = |\gamma| \, |a_{ij}|$ 
+
+ $ \therefore ||\gamma A|| = max_{i,j} |\gamma a_{ij}| = max_{i,j} |\gamma| \,| a_{ij}| = |\gamma| max_{i,j} |a_{ij}| =  |\gamma| \,||A||$
+
+\item $||A+B|| \leq ||A|| + ||B||$
+
+Let $C = A + B$ then $c_{ij} = a_{ij} + b_{ij} \implies |c_{ij}| \leq |a_{ij}| + |b_{ij}|\\ \implies max_{i,j} |c_{ij}| \leq max_{i,j} |a_{ij}| + max_{i,j} |b_{ij}|\implies ||C|| \leq ||A|| + ||B||$
+\end{enumerate}
+
+\end{solution}
+
+\item[(b)]
+\begin{solution}
+
+Let $A = \begin{pmatrix}
+2 & 9\\
+-3 & 4 \end{pmatrix} \implies ||A|| = 9
+$ and 
+$
+B = \begin{pmatrix}
+5 & 2\\
+4 & 1\\
+\end{pmatrix} \implies ||B|| = 5
+$
+
+$AB = \begin{pmatrix}
+46 & 13\\
+1 & -2
+\end{pmatrix} \implies ||AB|| = 46 > ||A|| \, ||B||$
+\end{solution}
+\end{itemize}
+\newproblem{8}
+ 
+
+\ifnum\me<2
+\begin{solution}
+
+Let $A$ and $B$ be two $n \times n$ square upper triangular matrices $\implies$ $a_{ij} = 0, b_{ij} = 0$ when $i > j$
+
+Let $C = AB$
+\begin{align*}
+c_{ij} & = \sum_{k=1}^na_{ik}b_{kj}\\
+& =  \sum_{k=1}^{j-1} a_{ik}b_{kj} + \sum_{k=j}^{i-1} a_{ik}b_{kj} + \sum_{k=i}^n a_{ik}b_{kj} \tag{1}
+\end{align*}
+
+Now in the calculation of $c_{ij}$ consider the case when $i > j$ and $k$ varies from $1$ to $n$ 
+\begin{itemize}
+\item When $k < j < i \implies a_{ik} = 0$, the first term in (1) becomes 0 i.e. $\sum_{k=1}^{j-1} a_{ik}b_{kj} = 0$
+\item When $j < k < i \implies a_{ik} = b_{kj} = 0$, the second term in (1) becomes 0 i.e. $\sum_{k=j}^{i-1} a_{ik}b_{kj} = 0$
+\item When $i < k < n \implies b_{kj} 0$, the third term in (1) becomes 0 i.e. $\sum_{k=i}^n a_{ik}b_{kj} = 0$
+\end{itemize}
+$\therefore$ If $i > j$, $c_{ij} = 0 + 0 + 0 = 0 \implies C$ is an upper triangular matrix. 
+\end{solution}
+
+
+\newproblem{9}
+
+\begin{itemize}
+
+\item[(a)]
+\ifnum\me<2
+\begin{solution}
+\begin{align*}
+& Ux = 0\\
+\implies &\begin{pmatrix}
+u_{11} & u_{12} & u_{13} & \dots & u_{1n}\\
+	   & u_{22} & u_{23} & \dots & u_{2n}\\
+	   &		& \ddots & 	     & 	\vdots	 \\
+	   &		&        & 	     & u_{nn}	 \\	   
+\end{pmatrix} \begin{pmatrix}
+x_1\\
+x_2\\
+\vdots\\
+x_n
+\end{pmatrix} = 0 \tag{1}\\
+\implies &u_{nn}x_{n} = 0\\
+&u_{n-1,n-1}x_{n-1} + u_{n-1, n}x_{n} = 0\\
+&u_{n-2,n-2}x_{n-2} + u_{n-2, n-1}x_{n-1} + u_{n-2, n}x_n = 0\\
+&\vdots\\
+&u_{n-k,n-k}x_{n-k} + u_{n-k, n-k+1}x_{n-k+1} + \dots + u_{n-k, n}x_n = 0 \tag{2}\\
+\end{align*}
+From (1) $x_n = \alpha \,\,\,\, \text{where } \alpha \text{ is some scalar}$
+
+(2) is equivalent to
+\begin{align*}
+&u_{k,k}x_{k} + u_{k, k+1}x_{k+1} + \dots + u_{k1, n}x_n = 0\\
+\implies &x_{k} = \frac{- \sum_{j=k+1}^{n} u_{kj}x_{j}}{u_{kk}} \,\,\,\, \text{for } k = 1, \dots, n-1 \tag{3}\\
+\end{align*}
+\end{solution}
+
+\item[(b)]
+
+\ifnum\me<2
+\begin{solution}
+
+Let $x_3 = \alpha$. Now use equation (3) from part (a) to calculate $x_2$ and $x_1$
+\begin{align*}
+& x_2 = \frac{- u_{23}x_3}{u_22} = \frac{-2\alpha}{3}\\
+& x_1 = \frac{-u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{2(-2\alpha/3) - \alpha/2}{1} = \frac{-11\alpha}{6}\\
+\therefore & x = \begin{pmatrix}
+-11\alpha/6\\
+-2\alpha/3\\
+\alpha
+\end{pmatrix}
+\end{align*}
+
+\end{solution}
+
+\item[(c)]
+
+\ifnum\me<2
+\begin{solution}
+
+From part(b), $ x = \begin{pmatrix}
+-11\alpha/6\\
+-2\alpha/3\\
+\alpha
+\end{pmatrix}$
+
+\end{solution}
+
+\end{itemize}
+\end{document}
+
+
